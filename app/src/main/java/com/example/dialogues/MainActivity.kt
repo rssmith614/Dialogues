@@ -2,6 +2,7 @@ package com.example.dialogues
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -9,6 +10,9 @@ import androidx.core.content.ContextCompat
 import android.util.Log
 import com.google.android.material.snackbar.Snackbar
 import com.example.dialogues.databinding.ActivityMainBinding
+import com.google.mlkit.vision.common.InputImage
+import java.io.File
+import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -51,7 +55,27 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        if (isAllPermissionsGranted) startCamera() else requestPermissions()
+        val image: InputImage
+//        pull image from resources
+        val resourceId = R.drawable.ocr_test
+        val uri = Uri.parse("android.resource://${packageName}/${resourceId}")
+        try {
+            image = InputImage.fromFilePath(this, uri)
+//            call the OCR activity
+            TextRecognizer(::textfound).recognizeImageText(image, 0, ::resulttext)
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
+//    OCR Callback functions
+//    Passes detected text into this one
+    private fun textfound(s: String) {
+        Log.d(TAG, s)
+    }
+
+//    passes boolean indicating successful text detection
+    private fun resulttext(b: Boolean) {
     }
 
     override fun onDestroy() {

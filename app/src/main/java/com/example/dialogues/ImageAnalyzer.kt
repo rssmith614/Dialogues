@@ -10,8 +10,8 @@ class ImageAnalyzer(onTextFound: (String) -> Unit): ImageAnalysis.Analyzer {
     @ExperimentalGetImage
     override fun analyze(imageProxy: ImageProxy) {
         val image = imageProxy.image ?: return
-        textRecognizer.recognizeImageText(image, imageProxy.imageInfo.rotationDegrees) {
-            imageProxy.close()
-        }
+//        textRecognizer.recognizeImageText(image, imageProxy.imageInfo.rotationDegrees) {
+//            imageProxy.close()
+//        }
     }
 }
