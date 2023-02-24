@@ -28,16 +28,16 @@ import java.util.*
 * Mute with proximity sensor
 * Have user adjust font size
 * Volume Control
-* 
+*
  */
-class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener{
+class TTSActivity : AppCompatActivity(), TextToSpeech.OnInitListener{
     private lateinit var tts: TextToSpeech
     private var selectedvoice: String = ""
     private var pitchvoice: Float = 0.0f
     private var talkspeed: Float = 0.0f
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_tts)
         tts = TextToSpeech(this, this, "com.google.android.tts")
 
     }
