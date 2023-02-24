@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
-<!--    camera permissions      -->
+    <!-- camera permissions -->
     <uses-feature android:name="android.hardware.camera.any" />
+
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
@@ -16,6 +16,11 @@
         android:theme="@style/Theme.Dialogues"
         tools:targetApi="31">
         <activity
+            android:name=".OCRConfirmation"
+            android:exported="false"
+            android:label="@string/title_activity_ocrconfirmation"
+            android:theme="@style/Theme.Dialogues.NoActionBar" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -24,10 +29,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
             android:value="ocr" />
-        <!-- To use multiple models: android:value="ocr,model2,model3" -->
     </application>
 
 </manifest>
