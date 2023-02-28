@@ -5,6 +5,7 @@ import android.graphics.*
 import android.media.ExifInterface
 import android.net.Uri
 import android.os.Bundle
+import android.os.StrictMode
 import android.util.Log
 import android.view.MotionEvent
 import android.widget.Button
@@ -111,8 +112,10 @@ class OCRConfirmation : AppCompatActivity() {
 
     // Process success state of text detection
     private fun resultText(b: Boolean) {
-        if (!b) {
+        if (b) {
             Log.e(TAG, "No text found")
+        } else {
+            Log.i(TAG, "Text found")
         }
     }
 
@@ -125,18 +128,23 @@ class OCRConfirmation : AppCompatActivity() {
         // pull "image" from process that started the activity use it to draw boxes
         val intentUri = intent.extras?.getString("imglocation")
         val uri = Uri.parse(intentUri)
+
         // prevent image scaling so boxes are drawn on same size image that was sent to OCR
         val options = BitmapFactory.Options()
         options.inScaled = false
-        val exif = ExifInterface(this.contentResolver.openInputStream(uri)!!)
-        val orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
-        val bitmap = BitmapFactory.decodeStream(this.contentResolver.openInputStream(uri))
-        val rotatedBitmap = when (orientation) {
-            ExifInterface.ORIENTATION_ROTATE_90 -> bitmap.rotate(90f)
-            ExifInterface.ORIENTATION_ROTATE_180 -> bitmap.rotate(180f)
-            ExifInterface.ORIENTATION_ROTATE_270 -> bitmap.rotate(270f)
-            else -> bitmap
-        }
+
+        val inStream = this.contentResolver.openInputStream(uri)
+//        val exif = ExifInterface(inStream!!)
+//        val orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
+        val bitmap = BitmapFactory.decodeStream(inStream)
+//        val rotatedBitmap = when (orientation) {
+//            ExifInterface.ORIENTATION_ROTATE_90 -> bitmap.rotate(90f)
+//            ExifInterface.ORIENTATION_ROTATE_180 -> bitmap.rotate(180f)
+//            ExifInterface.ORIENTATION_ROTATE_270 -> bitmap.rotate(270f)
+//            else -> bitmap
+//        }
+        val rotatedBitmap = bitmap.rotate(90f)
+
 
         // copy the image so we can draw on it
         val mutableBitmap = rotatedBitmap.copy(Bitmap.Config.ARGB_8888, true)
@@ -168,5 +176,7 @@ class OCRConfirmation : AppCompatActivity() {
         // put the new image on screen
         binding.imageView.setImageBitmap(mutableBitmap)
         binding.imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+
+        inStream?.close()
     }
 }

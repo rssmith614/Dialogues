@@ -9,6 +9,8 @@ import android.net.Uri
 import android.nfc.Tag
 import android.os.Build
 import android.os.Bundle
+import android.os.StrictMode
+import android.os.StrictMode.VmPolicy
 import android.provider.MediaStore
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -41,9 +43,6 @@ private val PreviewView.surfaceProvider: Preview.SurfaceProvider?
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-
-//    placeholder for image taken by camera
-    // private val resourceId = R.drawable.stc_sign
     
     private var imageCapture:ImageCapture?=null
 
@@ -51,7 +50,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var outputDirectory: File
 
-    private var URI = "hjkhkljhl"
+//    private var URI = ""
 
     private val isAllPermissionsGranted get() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
@@ -171,7 +170,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun transportfunc(link:Uri){
-        URI = link.toString();
+//        URI = link.toString()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -183,10 +182,9 @@ class MainActivity : AppCompatActivity() {
         // my button
 
 
-        if (isAllPermissionsGranted){
+        if (isAllPermissionsGranted) {
             startCamera()
-        }
-        else {
+        } else {
             requestPermissions()
         }
 
@@ -195,7 +193,7 @@ class MainActivity : AppCompatActivity() {
 
         var camera_Click = findViewById<Button>(R.id.camera_capture_button)
 
-        camera_Click.setOnClickListener{
+        camera_Click.setOnClickListener {
             var intent = Intent(this, ImageScreen::class.java)
 
             takePhoto()
@@ -203,22 +201,7 @@ class MainActivity : AppCompatActivity() {
             //Log.d(TAG, " code 234: $URI")
 
 
-
         }
-
-
-
-//        val image: InputImage
-////        pull image from resources
-//        val resourceId = R.drawable.ocr_test
-//        val uri = Uri.parse("android.resource://${packageName}/${resourceId}")
-//        try {
-//            image = InputImage.fromFilePath(this, uri)
-////            call the OCR activity
-//            TextRecognizer(::textfound).recognizeImageText(image, 0, ::resulttext)
-//        } catch (e: IOException) {
-//            e.printStackTrace()
-//        }
     }
 
     override fun onDestroy() {
