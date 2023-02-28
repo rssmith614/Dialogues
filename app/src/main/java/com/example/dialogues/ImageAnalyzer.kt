@@ -3,8 +3,9 @@ package com.example.dialogues
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
+import com.google.mlkit.vision.text.Text
 
-class ImageAnalyzer(onTextFound: (String) -> Unit): ImageAnalysis.Analyzer {
+class ImageAnalyzer(onTextFound: (Text) -> Unit): ImageAnalysis.Analyzer {
     private val textRecognizer = TextRecognizer(onTextFound)
 
     @ExperimentalGetImage

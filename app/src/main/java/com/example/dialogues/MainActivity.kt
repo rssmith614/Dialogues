@@ -1,6 +1,7 @@
 package com.example.dialogues
 
 import android.Manifest
+
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -35,6 +36,9 @@ import java.util.concurrent.Executors
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
+//    placeholder for image taken by camera
+    // private val resourceId = R.drawable.stc_sign
+    
     private var imageCapture:ImageCapture?=null
 
     private lateinit var cameraExecutor: ExecutorService
@@ -58,21 +62,20 @@ class MainActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_CODE_PERMISSIONS) {
-            if (isAllPermissionsGranted) {
-                startCamera()
-            } else {
-                Snackbar.make(binding.previewView, "Camera permission not granted. \nCannot perform magic ritual.", Snackbar.LENGTH_LONG).setAction("Retry") {
-                    requestPermissions()
-                }.show()
-                Log.e(TAG, "Camera permission not granted")
-            }
+//            if (isAllPermissionsGranted) {
+//                startCamera()
+//            } else {
+//                Snackbar.make(binding.previewView, "Camera permission not granted. \nCannot perform magic ritual.", Snackbar.LENGTH_LONG).setAction("Retry") {
+//                    requestPermissions()
+//                }.show()
+//                Log.e(TAG, "Camera permission not granted")
+//            }
         }
     }
 
     private val cameraAdapter = CameraAdapter {
         Log.d(TAG, "Text Found: $it")
     }
-
 
     //private fun startCamera() = cameraAdapter.startCamera(this, this, binding.previewView.createSurfaceProvider())
 
@@ -210,16 +213,6 @@ class MainActivity : AppCompatActivity() {
 //        } catch (e: IOException) {
 //            e.printStackTrace()
 //        }
-    }
-
-//    OCR Callback functions
-//    Passes detected text into this one
-    private fun textfound(s: String) {
-        Log.d(TAG, s)
-    }
-
-//    passes boolean indicating successful text detection
-    private fun resulttext(b: Boolean) {
     }
 
     override fun onDestroy() {

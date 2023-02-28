@@ -17,8 +17,10 @@
         android:theme="@style/Theme.Dialogues"
         tools:targetApi="31">
         <activity
-            android:name=".ImageScreen"
-            android:exported="false" />
+            android:name=".OCRConfirmation"
+            android:exported="false"
+            android:label="@string/title_activity_ocrconfirmation"
+            android:theme="@style/Theme.Dialogues.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

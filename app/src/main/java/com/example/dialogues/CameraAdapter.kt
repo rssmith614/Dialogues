@@ -5,11 +5,12 @@ import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
+import com.google.mlkit.vision.text.Text
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class CameraAdapter(onTextFound: (String) -> Unit) {
-    private var imageCapture:ImageCapture?=null
+class CameraAdapter(onTextFound: (Text) -> Unit) {
+
     private val imageAnalyzerExecutor: ExecutorService by lazy { Executors.newSingleThreadExecutor() }
     private val imageAnalyzer by lazy {
         ImageAnalysis.Builder()
