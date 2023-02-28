@@ -2,6 +2,7 @@ package com.example.dialogues
 
 import android.annotation.SuppressLint
 import android.graphics.*
+import android.media.ExifInterface
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -115,6 +116,11 @@ class OCRConfirmation : AppCompatActivity() {
         }
     }
 
+    private fun Bitmap.rotate(degrees: Float): Bitmap {
+        val matrix = Matrix().apply { postRotate(degrees) }
+        return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
+    }
+
     private fun drawBoxes() {
         // pull "image" from process that started the activity use it to draw boxes
         val intentUri = intent.extras?.getString("imglocation")
@@ -122,9 +128,18 @@ class OCRConfirmation : AppCompatActivity() {
         // prevent image scaling so boxes are drawn on same size image that was sent to OCR
         val options = BitmapFactory.Options()
         options.inScaled = false
+        val exif = ExifInterface(this.contentResolver.openInputStream(uri)!!)
+        val orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
         val bitmap = BitmapFactory.decodeStream(this.contentResolver.openInputStream(uri))
+        val rotatedBitmap = when (orientation) {
+            ExifInterface.ORIENTATION_ROTATE_90 -> bitmap.rotate(90f)
+            ExifInterface.ORIENTATION_ROTATE_180 -> bitmap.rotate(180f)
+            ExifInterface.ORIENTATION_ROTATE_270 -> bitmap.rotate(270f)
+            else -> bitmap
+        }
+
         // copy the image so we can draw on it
-        val mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
+        val mutableBitmap = rotatedBitmap.copy(Bitmap.Config.ARGB_8888, true)
 
         val canvas = Canvas(mutableBitmap)
 
@@ -147,11 +162,11 @@ class OCRConfirmation : AppCompatActivity() {
         }
 
         // we need the size ratio between the original image and the bitmap for clicking boxes
-        viewToBitmapHeightScaleFactor = bitmap.height.toDouble() / binding.imageView.height.toDouble()
-        viewToBitmapWidthScaleFactor = bitmap.width.toDouble() / binding.imageView.width.toDouble()
+        viewToBitmapHeightScaleFactor = rotatedBitmap.height.toDouble() / binding.imageView.height.toDouble()
+        viewToBitmapWidthScaleFactor = rotatedBitmap.width.toDouble() / binding.imageView.width.toDouble()
 
         // put the new image on screen
         binding.imageView.setImageBitmap(mutableBitmap)
-//        binding.imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+        binding.imageView.scaleType = ImageView.ScaleType.CENTER_CROP
     }
 }
