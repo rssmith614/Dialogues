@@ -77,7 +77,7 @@ class OCRConfirmation : AppCompatActivity() {
         }
 
         // pull "image" from process that started the activity to call OCR
-        val intentUri = intent.extras?.getString("Image")
+        val intentUri = intent.extras?.getString("imglocation")
         val uri = Uri.parse(intentUri)
 
         val image: InputImage
@@ -117,7 +117,7 @@ class OCRConfirmation : AppCompatActivity() {
 
     private fun drawBoxes() {
         // pull "image" from process that started the activity use it to draw boxes
-        val intentUri = intent.extras?.getString("Image")
+        val intentUri = intent.extras?.getString("imglocation")
         val uri = Uri.parse(intentUri)
         // prevent image scaling so boxes are drawn on same size image that was sent to OCR
         val options = BitmapFactory.Options()
@@ -152,6 +152,6 @@ class OCRConfirmation : AppCompatActivity() {
 
         // put the new image on screen
         binding.imageView.setImageBitmap(mutableBitmap)
-        binding.imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+//        binding.imageView.scaleType = ImageView.ScaleType.CENTER_CROP
     }
 }

@@ -22,6 +22,7 @@ import androidx.camera.core.ImageCapture.OutputFileResults
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.PreviewView
 import com.google.android.material.snackbar.Snackbar
 import com.example.dialogues.databinding.ActivityMainBinding
 import com.google.mlkit.vision.common.InputImage
@@ -32,6 +33,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+
+private val PreviewView.surfaceProvider: Preview.SurfaceProvider?
+    get() {
+        TODO("Not yet implemented")
+    }
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -147,7 +153,7 @@ class MainActivity : AppCompatActivity() {
                     val msg = "Photo saved"
                     Log.d(TAG, "On success code23: " + savedUri.toString())
                     Toast.makeText(this@MainActivity, "$msg $savedUri", Toast.LENGTH_SHORT).show()
-                    var intent = Intent(this@MainActivity, ImageScreen::class.java)
+                    var intent = Intent(this@MainActivity, OCRConfirmation::class.java)
                     intent.putExtra("imglocation", savedUri.toString())
                     startActivity(intent)
 

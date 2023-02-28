@@ -11,6 +11,7 @@ import java.util.concurrent.Executors
 
 class CameraAdapter(onTextFound: (Text) -> Unit) {
 
+    private var imageCapture:ImageCapture?=null
     private val imageAnalyzerExecutor: ExecutorService by lazy { Executors.newSingleThreadExecutor() }
     private val imageAnalyzer by lazy {
         ImageAnalysis.Builder()
