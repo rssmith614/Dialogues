@@ -9,6 +9,8 @@ import android.net.Uri
 import android.nfc.Tag
 import android.os.Build
 import android.os.Bundle
+import android.os.StrictMode
+import android.os.StrictMode.VmPolicy
 import android.provider.MediaStore
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -22,6 +24,7 @@ import androidx.camera.core.ImageCapture.OutputFileResults
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.PreviewView
 import com.google.android.material.snackbar.Snackbar
 import com.example.dialogues.databinding.ActivityMainBinding
 import com.google.mlkit.vision.common.InputImage
@@ -33,11 +36,13 @@ import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
+private val PreviewView.surfaceProvider: Preview.SurfaceProvider?
+    get() {
+        TODO("Not yet implemented")
+    }
+
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-
-//    placeholder for image taken by camera
-    // private val resourceId = R.drawable.stc_sign
     
     private var imageCapture:ImageCapture?=null
 
@@ -45,7 +50,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var outputDirectory: File
 
-    private var URI = "hjkhkljhl"
+//    private var URI = ""
 
     private val isAllPermissionsGranted get() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
@@ -147,7 +152,7 @@ class MainActivity : AppCompatActivity() {
                     val msg = "Photo saved"
                     Log.d(TAG, "On success code23: " + savedUri.toString())
                     Toast.makeText(this@MainActivity, "$msg $savedUri", Toast.LENGTH_SHORT).show()
-                    var intent = Intent(this@MainActivity, ImageScreen::class.java)
+                    var intent = Intent(this@MainActivity, OCRConfirmation::class.java)
                     intent.putExtra("imglocation", savedUri.toString())
                     startActivity(intent)
 
@@ -165,7 +170,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun transportfunc(link:Uri){
-        URI = link.toString();
+//        URI = link.toString()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -177,10 +182,9 @@ class MainActivity : AppCompatActivity() {
         // my button
 
 
-        if (isAllPermissionsGranted){
+        if (isAllPermissionsGranted) {
             startCamera()
-        }
-        else {
+        } else {
             requestPermissions()
         }
 
@@ -189,7 +193,7 @@ class MainActivity : AppCompatActivity() {
 
         var camera_Click = findViewById<Button>(R.id.camera_capture_button)
 
-        camera_Click.setOnClickListener{
+        camera_Click.setOnClickListener {
             var intent = Intent(this, ImageScreen::class.java)
 
             takePhoto()
@@ -197,22 +201,7 @@ class MainActivity : AppCompatActivity() {
             //Log.d(TAG, " code 234: $URI")
 
 
-
         }
-
-
-
-//        val image: InputImage
-////        pull image from resources
-//        val resourceId = R.drawable.ocr_test
-//        val uri = Uri.parse("android.resource://${packageName}/${resourceId}")
-//        try {
-//            image = InputImage.fromFilePath(this, uri)
-////            call the OCR activity
-//            TextRecognizer(::textfound).recognizeImageText(image, 0, ::resulttext)
-//        } catch (e: IOException) {
-//            e.printStackTrace()
-//        }
     }
 
     override fun onDestroy() {
