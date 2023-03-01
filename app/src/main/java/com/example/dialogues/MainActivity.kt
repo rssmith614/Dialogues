@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import com.google.mlkit.common.model.DownloadConditions
-import com.google.mlkit.common.model.RemoteModelManager
 import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
@@ -26,9 +25,20 @@ class MainActivity : AppCompatActivity() {
 
         val textView = findViewById<TextView>(R.id.textView)
 
+        val testString = "Me gusta gatos"
+
+        translateString(textView, testString)
+
+
+
+    }
+
+    fun translateString(textView: TextView, input: String){
+
+
         val options = TranslatorOptions.Builder()
-            .setSourceLanguage(TranslateLanguage.ENGLISH)
-            .setTargetLanguage(TranslateLanguage.SPANISH)
+            .setSourceLanguage(TranslateLanguage.SPANISH)
+            .setTargetLanguage(TranslateLanguage.ENGLISH)
             .build()
 
         val englishSpanishTranslator = Translation.getClient(options)
@@ -42,7 +52,7 @@ class MainActivity : AppCompatActivity() {
             .addOnFailureListener { Log.d(TAG, "Model download Failed") }
 
 
-        englishSpanishTranslator.translate("English")
+        englishSpanishTranslator.translate(input)
             .addOnSuccessListener { translatedText -> textView.text = translatedText }
             .addOnFailureListener { Log.d(TAG, "Translate Failed") }
 
