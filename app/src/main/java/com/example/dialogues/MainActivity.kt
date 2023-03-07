@@ -1,6 +1,7 @@
 package com.example.dialogues
 
 import android.content.ContentValues.TAG
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -23,40 +24,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val textView = findViewById<TextView>(R.id.textView)
-
-        val testString = "Me gusta gatos"
-
-        translateString(textView, testString)
-
-
+        val intent = Intent(this, TranslationTTS::class.java)
+        startActivity(intent)
 
     }
 
-    fun translateString(textView: TextView, input: String){
 
-
-        val options = TranslatorOptions.Builder()
-            .setSourceLanguage(TranslateLanguage.SPANISH)
-            .setTargetLanguage(TranslateLanguage.ENGLISH)
-            .build()
-
-        val englishSpanishTranslator = Translation.getClient(options)
-
-        var conditions = DownloadConditions.Builder()
-            .requireWifi()
-            .build()
-
-        englishSpanishTranslator.downloadModelIfNeeded(conditions)
-            .addOnSuccessListener { textView.text = "Model downloaded" }
-            .addOnFailureListener { Log.d(TAG, "Model download Failed") }
-
-
-        englishSpanishTranslator.translate(input)
-            .addOnSuccessListener { translatedText -> textView.text = translatedText }
-            .addOnFailureListener { Log.d(TAG, "Translate Failed") }
-
-
-    }
 
 }
