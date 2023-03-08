@@ -19,7 +19,7 @@ class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
         setContentView(R.layout.activity_translation_tts)
 
 
-        val testString = "Me gusta gatos y perros"
+        val testString = intent.extras?.getString("Text", "")
         val originalText = findViewById<TextView>(R.id.source_textView)
 
         originalText.text = testString
@@ -31,7 +31,9 @@ class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
         val tts = TextToSpeech(this, this, "com.google.android.tts")
 
         button.setOnClickListener{
-            translateString(tts, displayText, testString)
+            if (testString != null) {
+                translateString(tts, displayText, testString)
+            }
         }
 
 
@@ -47,8 +49,8 @@ class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
     fun translateString(tts: TextToSpeech, displayText: TextView, input: String){
 
         val options = TranslatorOptions.Builder()
-            .setSourceLanguage(TranslateLanguage.SPANISH)
-            .setTargetLanguage(TranslateLanguage.ENGLISH)
+            .setSourceLanguage(TranslateLanguage.ENGLISH)
+            .setTargetLanguage(TranslateLanguage.SPANISH)
             .build()
 
         val englishSpanishTranslator = Translation.getClient(options)
