@@ -3,27 +3,48 @@ package com.example.dialogues
 import android.content.ContentValues
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.util.Log
+import android.widget.Button
 import android.widget.TextView
 import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
+import java.util.*
 
-class TranslationTTS : AppCompatActivity() {
-    
+class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_translation_tts)
 
+
+        val testString = "Me gusta gatos y perros"
+        val originalText = findViewById<TextView>(R.id.source_textView)
+
+        originalText.text = testString
+
         val displayText = findViewById<TextView>(R.id.TranslateTTS_textView)
 
-        translateString(displayText, "Me gusta gatos y perros")
+        val button = findViewById<Button>(R.id.clickButton)
+
+        val tts = TextToSpeech(this, this, "com.google.android.tts")
+
+        button.setOnClickListener{
+            translateString(tts, displayText, testString)
+        }
+
 
     }
 
+    override fun onInit(status: Int) {
+        if (status == TextToSpeech.SUCCESS) {
+            Log.d(ContentValues.TAG, "TTS Success")
+        }
+    }
+
     //Currently function takes a TextView to display text, modify parameters as needed
-    fun translateString(displayText: TextView, input: String){
+    fun translateString(tts: TextToSpeech, displayText: TextView, input: String){
 
         val options = TranslatorOptions.Builder()
             .setSourceLanguage(TranslateLanguage.SPANISH)
@@ -42,9 +63,20 @@ class TranslationTTS : AppCompatActivity() {
 
 
         englishSpanishTranslator.translate(input)
-            .addOnSuccessListener { translatedText -> displayText.text  = translatedText}
+            .addOnSuccessListener {
+                    translatedText -> displayText.text  = translatedText
+                    speakString(tts, translatedText)
+
+            }
             .addOnFailureListener { Log.d(ContentValues.TAG, "Translate Failed") }
 
 
     }
+
+    fun speakString(tts: TextToSpeech, input: String){
+
+            tts.speak(input, TextToSpeech.QUEUE_ADD, null)
+
+    }
+
 }
