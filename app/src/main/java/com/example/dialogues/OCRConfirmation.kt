@@ -1,6 +1,7 @@
 package com.example.dialogues
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.*
 import android.media.ExifInterface
 import android.net.Uri
@@ -72,8 +73,8 @@ class OCRConfirmation : AppCompatActivity() {
                 }
             }
             // call Translation activity
-            // val intent = Intent(this, TranslationActivity::class.java).putExtra("Text", result)
-            // startActivity(intent)
+            val intent = Intent(this, TranslationTTS::class.java).putExtra("Text", result)
+            startActivity(intent)
 
             Log.i(TAG, "Calling translation activity: $result")
         }
