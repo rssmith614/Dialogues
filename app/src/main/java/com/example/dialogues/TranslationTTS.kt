@@ -22,13 +22,9 @@ import java.util.*
 
 //KNOWN ISSUES:
 //BACK BUTTON FOR SETTINGS WORKS BUT DOESNT REMEMBER THE TEXT ITS SUPPOSE TO SPEAK (STATE ISSUE)
-//PAUSE AFTER EACH WORD FEATURE IS MISSING AND STILL NEEDS TO BE INTEGRATED.
 //INPUT LANGUAGE IS ALWAYS ENGLISH.
 
 
-
-//INPUT LANGUAGE = SOURCE LANGUAGE
-//OUTPUT LANGAUGE = TARGET LANGUAGE
 class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
     private lateinit var tts: TextToSpeech
     private lateinit var prefs: SharedPreferences
@@ -39,6 +35,7 @@ class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
     private var pitchvoice: Float = 0.0f
     private var talkspeed: Float = 0.0f
     private val barStarter = 50
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_translation_tts)
@@ -183,7 +180,7 @@ class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
             tts.setSpeechRate(0.10f)
         }
         val pitchvoice = prefs2.getInt("pitch", barStarter ).toFloat()/50.0f
-        if (pitchvoice == 0f){
+        if(pitchvoice == 0f){
             tts.setPitch(0.10f)
         }
         tts.setSpeechRate(talkspeed)
@@ -232,8 +229,20 @@ class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
                 tts.setVoice(voice1)
             }
         }
+        val pauseSpeakPreferences = getSharedPreferences("pauseSpeakPrefs", MODE_PRIVATE)
+        val pauseSpeakPrefSwitch = pauseSpeakPreferences.getBoolean("switched", false)
+            if(pauseSpeakPrefSwitch == true){
+                val alttext = input.split(" ")
+                var i = 0
+                while (i < alttext.size) { 
+                    tts.speak(alttext[i], TextToSpeech.QUEUE_ADD, null) //tts speaks
+                    i++
+                }
+            }
+        else {
+                tts.speak(input, TextToSpeech.QUEUE_ADD, null)
+            }
 
-        tts.speak(input, TextToSpeech.QUEUE_ADD, null)
 
     }
 
