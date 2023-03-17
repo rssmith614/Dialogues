@@ -20,15 +20,22 @@ import com.google.mlkit.nl.translate.TranslatorOptions
 import java.util.*
 
 
-//KNOWN ERRORS/ISSUES:
+//KNOWN ISSUES:
 //BACK BUTTON FOR SETTINGS WORKS BUT DOESNT REMEMBER THE TEXT ITS SUPPOSE TO SPEAK (STATE ISSUE)
 //PAUSE AFTER EACH WORD FEATURE IS MISSING AND STILL NEEDS TO BE INTEGRATED.
-//IF USER PUTS PROGRESS BAR TO ZERO, IT WILL TALK NORMAL. ADD A RESTRICTION THAT GIVES THE LOWEST PITCH OR SPEED INSTEAD. 
+//INPUT LANGUAGE IS ALWAYS ENGLISH.
+
+
+
+//INPUT LANGUAGE = SOURCE LANGUAGE
+//OUTPUT LANGAUGE = TARGET LANGUAGE
 class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
     private lateinit var tts: TextToSpeech
     private lateinit var prefs: SharedPreferences
     private lateinit var prefs2: SharedPreferences
     private var selectedvoice: String = ""
+    private var selectedil: String = ""
+    private var selectedol: String = ""
     private var pitchvoice: Float = 0.0f
     private var talkspeed: Float = 0.0f
     private val barStarter = 50
@@ -39,7 +46,7 @@ class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
         tts = TextToSpeech(this, this, "com.google.android.tts")
         prefs = PreferenceManager.getDefaultSharedPreferences(this) // Initialize prefs
         prefs2 = PreferenceManager.getDefaultSharedPreferences(this) // Initialize prefs
-        talkspeed = prefs.getInt("speed", barStarter).toFloat()/50.0f
+        talkspeed = prefs.getInt("speed", barStarter).toFloat()
         pitchvoice = prefs2.getInt("pitch", barStarter).toFloat()/50.0f
 
 
@@ -80,41 +87,111 @@ class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     //Currently function takes a TextView to display text, modify parameters as needed
     fun translateString(tts: TextToSpeech, displayText: TextView, input: String){
-
-        val options = TranslatorOptions.Builder()
-            .setSourceLanguage(TranslateLanguage.ENGLISH)
-            .setTargetLanguage(TranslateLanguage.SPANISH)
-            .build()
-
-        val englishSpanishTranslator = Translation.getClient(options)
-
-        var conditions = DownloadConditions.Builder()
-            .requireWifi()
-            .build()
-
-        englishSpanishTranslator.downloadModelIfNeeded(conditions)
-            .addOnSuccessListener { }
-            .addOnFailureListener { Log.d(ContentValues.TAG, "Model download Failed") }
+        val olPreferences = getSharedPreferences("olPreferences", MODE_PRIVATE)
+        selectedol = olPreferences.getString("Selectedol","").toString()
 
 
-        englishSpanishTranslator.translate(input)
-            .addOnSuccessListener {
-                    translatedText -> displayText.text  = translatedText
-                speakString(tts, translatedText)
+        fun translate(options : TranslatorOptions) {
+            val englishSpanishTranslator = Translation.getClient(options)
 
+            var conditions = DownloadConditions.Builder()
+                .requireWifi()
+                .build()
+
+            englishSpanishTranslator.downloadModelIfNeeded(conditions)
+                .addOnSuccessListener { }
+                .addOnFailureListener { Log.d(ContentValues.TAG, "Model download Failed") }
+
+
+            englishSpanishTranslator.translate(input)
+                .addOnSuccessListener { translatedText ->
+                    displayText.text = translatedText
+                    speakString(tts, translatedText)
+
+                }
+                .addOnFailureListener { Log.d(ContentValues.TAG, "Translate Failed") }
+
+        }
+
+        when (selectedol){
+            "English" -> {
+                val options = TranslatorOptions.Builder()
+                    .setSourceLanguage(TranslateLanguage.ENGLISH)
+                    .setTargetLanguage(TranslateLanguage.ENGLISH)
+                    .build()
+                    translate(options)
             }
-            .addOnFailureListener { Log.d(ContentValues.TAG, "Translate Failed") }
+            "Spanish"-> {
+                val options = TranslatorOptions.Builder()
+                    .setSourceLanguage(TranslateLanguage.ENGLISH)
+                    .setTargetLanguage(TranslateLanguage.SPANISH)
+                    .build()
+                translate(options)
+            }
+            "French"->{
+                val options = TranslatorOptions.Builder()
+                    .setSourceLanguage(TranslateLanguage.ENGLISH)
+                    .setTargetLanguage(TranslateLanguage.FRENCH)
+                    .build()
+                translate(options)
+            }
+            "German"->{
+                val options = TranslatorOptions.Builder()
+                    .setSourceLanguage(TranslateLanguage.ENGLISH)
+                    .setTargetLanguage(TranslateLanguage.GERMAN)
+                    .build()
+                translate(options)
+            }
+            "Hindi"->{
+                val options = TranslatorOptions.Builder()
+                    .setSourceLanguage(TranslateLanguage.ENGLISH)
+                    .setTargetLanguage(TranslateLanguage.HINDI)
+                    .build()
+                translate(options)
+            }
+
+            "Chinese"->{
+                val options = TranslatorOptions.Builder()
+                    .setSourceLanguage(TranslateLanguage.ENGLISH)
+                    .setTargetLanguage(TranslateLanguage.CHINESE)
+                    .build()
+                translate(options)
+            }
+            "Japanese"->{
+                val options = TranslatorOptions.Builder()
+                    .setSourceLanguage(TranslateLanguage.ENGLISH)
+                    .setTargetLanguage(TranslateLanguage.JAPANESE)
+                    .build()
+                translate(options)
+            }
+            "Arabic"->{
+                val options = TranslatorOptions.Builder()
+                    .setSourceLanguage(TranslateLanguage.ENGLISH)
+                    .setTargetLanguage(TranslateLanguage.ARABIC)
+                    .build()
+                translate(options)
+            }
+        }
 
 
     }
 
+
     fun speakString(tts: TextToSpeech, input: String){
         val talkspeed = prefs.getInt("speed", barStarter ).toFloat()/50.0f
+        if (talkspeed == 0f){
+            tts.setSpeechRate(0.10f)
+        }
         val pitchvoice = prefs2.getInt("pitch", barStarter ).toFloat()/50.0f
+        if (pitchvoice == 0f){
+            tts.setPitch(0.10f)
+        }
         tts.setSpeechRate(talkspeed)
         tts.setPitch(pitchvoice)
-        val sharedPreferences = getSharedPreferences("VoicePreferences", Context.MODE_PRIVATE)
+
+        val sharedPreferences = getSharedPreferences("VoicePreferences", MODE_PRIVATE)
         selectedvoice = sharedPreferences.getString("SelectedVoice", "").toString()
+       
         when (selectedvoice) {
             "Female 1 (UK)" -> { //BRITISH WOMEN
                 val voice1 = Voice("en-gb-x-gba-network", Locale.US, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)

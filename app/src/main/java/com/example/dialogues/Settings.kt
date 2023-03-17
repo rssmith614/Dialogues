@@ -17,10 +17,16 @@ import java.util.*
 class Settings : AppCompatActivity() {
 
     private lateinit var voiceSpinner: Spinner
+    private lateinit var ilSpinner: Spinner
+    private lateinit var olSpinner: Spinner
     private  var selectedVoice: String = ""
+    private var selectedil: String = ""
+    private var selectedol: String = ""
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var prefs: SharedPreferences
     private lateinit var prefs2: SharedPreferences
+    private lateinit var ilPreferences: SharedPreferences
+    private lateinit var olPreferences: SharedPreferences
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +35,8 @@ class Settings : AppCompatActivity() {
         val actionBar = supportActionBar
         actionBar!!.title = "Settings Activity"
         voiceSpinner = findViewById<Spinner>(R.id.spinner)
+        ilSpinner = findViewById<Spinner>(R.id.ilspinner)
+        olSpinner = findViewById<Spinner>(R.id.olspinner)
         prefs = PreferenceManager.getDefaultSharedPreferences(this)
         prefs2 = PreferenceManager.getDefaultSharedPreferences(this)
         val speedBar = findViewById<SeekBar>(R.id.speedbar)
@@ -55,6 +63,48 @@ class Settings : AppCompatActivity() {
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
+
+
+        val ilOptions = arrayOf("English", "Spanish", "French", "German", "Hindi", "Chinese", "Japanese", "Arabic")
+        val adapter2 = ArrayAdapter(this, android.R.layout.simple_spinner_item, ilOptions)
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        ilSpinner.adapter = adapter2
+        ilPreferences = getSharedPreferences("ilPreferences", Context.MODE_PRIVATE)
+
+        selectedil = ilPreferences.getString("Selectedil", "").toString()
+        ilSpinner.setSelection(ilOptions.indexOf(selectedil))
+
+        ilSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                selectedil = parent.getItemAtPosition(position).toString()
+                val ileditor = ilPreferences.edit()
+                ileditor.putString("Selectedil", selectedil)
+                ileditor.apply()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
+
+        val olOptions =  arrayOf("English", "Spanish", "French", "German", "Hindi", "Chinese", "Japanese", "Arabic")
+        val adapter3 = ArrayAdapter(this, android.R.layout.simple_spinner_item, ilOptions)
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        olSpinner.adapter = adapter3
+        olPreferences = getSharedPreferences("olPreferences", Context.MODE_PRIVATE)
+
+        selectedol = olPreferences.getString("Selectedol", "").toString()
+        olSpinner.setSelection(olOptions.indexOf(selectedol))
+
+        olSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                selectedol = parent.getItemAtPosition(position).toString()
+                val oleditor = olPreferences.edit()
+                oleditor.putString("Selectedol", selectedol)
+                oleditor.apply()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
+
 
         //Voice Part of Code
         val voiceOptions = arrayOf("Female 1 (UK)", "Female 2 (US)", "Female 3 (IN)", "Female 4 (ES)", "Male 1 (UK)", "Male 2 (US)", "Male 3 (IN)", "Male 4 (ES)")
