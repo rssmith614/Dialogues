@@ -22,7 +22,6 @@ import java.util.*
 
 //KNOWN ISSUES:
 //BACK BUTTON FOR SETTINGS WORKS BUT DOESNT REMEMBER THE TEXT ITS SUPPOSE TO SPEAK (STATE ISSUE)
-//INPUT LANGUAGE IS ALWAYS ENGLISH.
 
 
 class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
@@ -109,39 +108,55 @@ class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
                 .addOnFailureListener { Log.d(ContentValues.TAG, "Translate Failed") }
 
         }
+        val ilPreferences = getSharedPreferences("ilPreferences", MODE_PRIVATE)
+        selectedil = ilPreferences.getString("Selectedil","").toString()
+
+        val sourceLang: String = when(selectedil) {
+            "English" -> TranslateLanguage.ENGLISH
+            "Spanish" -> TranslateLanguage.SPANISH
+            "French" -> TranslateLanguage.FRENCH
+            "German" -> TranslateLanguage.GERMAN
+            "Hindi" -> TranslateLanguage.HINDI
+            "Chinese" -> TranslateLanguage.CHINESE
+            "Japanese" -> TranslateLanguage.JAPANESE
+            "Arabic" -> TranslateLanguage.ARABIC
+            else -> TranslateLanguage.ENGLISH // Default to English if no language is selected
+        }
+
 
         when (selectedol){
             "English" -> {
                 val options = TranslatorOptions.Builder()
-                    .setSourceLanguage(TranslateLanguage.ENGLISH)
+                    .setSourceLanguage(sourceLang)
                     .setTargetLanguage(TranslateLanguage.ENGLISH)
                     .build()
-                    translate(options)
+                translate(options)
             }
+
             "Spanish"-> {
                 val options = TranslatorOptions.Builder()
-                    .setSourceLanguage(TranslateLanguage.ENGLISH)
+                    .setSourceLanguage(sourceLang)
                     .setTargetLanguage(TranslateLanguage.SPANISH)
                     .build()
                 translate(options)
             }
             "French"->{
                 val options = TranslatorOptions.Builder()
-                    .setSourceLanguage(TranslateLanguage.ENGLISH)
+                    .setSourceLanguage(sourceLang)
                     .setTargetLanguage(TranslateLanguage.FRENCH)
                     .build()
                 translate(options)
             }
             "German"->{
                 val options = TranslatorOptions.Builder()
-                    .setSourceLanguage(TranslateLanguage.ENGLISH)
+                    .setSourceLanguage(sourceLang)
                     .setTargetLanguage(TranslateLanguage.GERMAN)
                     .build()
                 translate(options)
             }
             "Hindi"->{
                 val options = TranslatorOptions.Builder()
-                    .setSourceLanguage(TranslateLanguage.ENGLISH)
+                    .setSourceLanguage(sourceLang)
                     .setTargetLanguage(TranslateLanguage.HINDI)
                     .build()
                 translate(options)
@@ -149,21 +164,21 @@ class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
 
             "Chinese"->{
                 val options = TranslatorOptions.Builder()
-                    .setSourceLanguage(TranslateLanguage.ENGLISH)
+                    .setSourceLanguage(sourceLang)
                     .setTargetLanguage(TranslateLanguage.CHINESE)
                     .build()
                 translate(options)
             }
             "Japanese"->{
                 val options = TranslatorOptions.Builder()
-                    .setSourceLanguage(TranslateLanguage.ENGLISH)
+                    .setSourceLanguage(sourceLang)
                     .setTargetLanguage(TranslateLanguage.JAPANESE)
                     .build()
                 translate(options)
             }
             "Arabic"->{
                 val options = TranslatorOptions.Builder()
-                    .setSourceLanguage(TranslateLanguage.ENGLISH)
+                    .setSourceLanguage(sourceLang)
                     .setTargetLanguage(TranslateLanguage.ARABIC)
                     .build()
                 translate(options)
@@ -234,7 +249,7 @@ class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
             if(pauseSpeakPrefSwitch == true){
                 val alttext = input.split(" ")
                 var i = 0
-                while (i < alttext.size) { 
+                while (i < alttext.size) {
                     tts.speak(alttext[i], TextToSpeech.QUEUE_ADD, null) //tts speaks
                     i++
                 }
