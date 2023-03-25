@@ -1,6 +1,8 @@
 package com.example.dialogues
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.speech.tts.TextToSpeech
@@ -11,6 +13,7 @@ import android.widget.*
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.recyclerview.widget.RecyclerView.LayoutManager.LayoutPrefetchRegistry
 import com.google.android.material.switchmaterial.SwitchMaterial
 import java.util.*
 
@@ -32,8 +35,6 @@ class Settings : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings_tts)
-        val actionBar = supportActionBar
-        actionBar!!.title = "Settings Activity"
         voiceSpinner = findViewById<Spinner>(R.id.spinner)
         ilSpinner = findViewById<Spinner>(R.id.ilspinner)
         olSpinner = findViewById<Spinner>(R.id.olspinner)
@@ -48,7 +49,7 @@ class Settings : AppCompatActivity() {
         pitchBar.progress = prefs2.getInt("pitch", 50)
 
 
-        speedBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        speedBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 val prefeditor = prefs.edit()
                 prefeditor.putInt("speed", progress)
@@ -57,7 +58,7 @@ class Settings : AppCompatActivity() {
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
-        pitchBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        pitchBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 val pref2editor = prefs2.edit()
                 pref2editor.putInt("pitch", progress)
@@ -66,13 +67,16 @@ class Settings : AppCompatActivity() {
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
+        val backButton = findViewById<ImageButton>(R.id.backbutton)
+        backButton.setOnClickListener {
+            onBackPressed()
 
+        }
 
         val ilOptions = arrayOf("English", "Spanish", "French", "German", "Hindi", "Chinese", "Japanese", "Arabic")
         val adapter2 = ArrayAdapter(this, android.R.layout.simple_spinner_item, ilOptions)
-        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         ilSpinner.adapter = adapter2
-        ilPreferences = getSharedPreferences("ilPreferences", Context.MODE_PRIVATE)
+        ilPreferences = getSharedPreferences("ilPreferences", MODE_PRIVATE)
 
         selectedil = ilPreferences.getString("Selectedil", "").toString()
         ilSpinner.setSelection(ilOptions.indexOf(selectedil))
@@ -92,7 +96,7 @@ class Settings : AppCompatActivity() {
         val adapter3 = ArrayAdapter(this, android.R.layout.simple_spinner_item, ilOptions)
         //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         olSpinner.adapter = adapter3
-        olPreferences = getSharedPreferences("olPreferences", Context.MODE_PRIVATE)
+        olPreferences = getSharedPreferences("olPreferences", MODE_PRIVATE)
 
         selectedol = olPreferences.getString("Selectedol", "").toString()
         olSpinner.setSelection(olOptions.indexOf(selectedol))
@@ -114,7 +118,7 @@ class Settings : AppCompatActivity() {
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, voiceOptions)
         //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         voiceSpinner.adapter = adapter
-        sharedPreferences = getSharedPreferences("VoicePreferences", Context.MODE_PRIVATE)
+        sharedPreferences = getSharedPreferences("VoicePreferences", MODE_PRIVATE)
 
         selectedVoice = sharedPreferences.getString("SelectedVoice", "").toString()
         voiceSpinner.setSelection(voiceOptions.indexOf(selectedVoice))

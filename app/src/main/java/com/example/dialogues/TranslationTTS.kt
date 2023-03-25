@@ -79,7 +79,13 @@ class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
             startActivity(intent)
             //textView.setText("")
         }
+        val backButton = findViewById<ImageButton>(R.id.backbutton)
+        backButton.setOnClickListener {
+            onBackPressed()
+
+        }
     }
+    
 
     //Currently function takes a TextView to display text, modify parameters as needed
     fun translateString(tts: TextToSpeech, displayText: TextView, input: String){
