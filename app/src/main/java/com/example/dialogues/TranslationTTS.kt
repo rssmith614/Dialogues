@@ -4,6 +4,7 @@ import android.content.ContentValues
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
+import android.speech.tts.Voice
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
@@ -76,8 +77,10 @@ class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
     }
 
     fun speakString(tts: TextToSpeech, input: String){
-
-            tts.speak(input, TextToSpeech.QUEUE_ADD, null)
+        val locSpanish = Locale("spa","MEX")
+        val voice1 = Voice("es-es-x-eee-local", locSpanish, Voice.QUALITY_HIGH, Voice.LATENCY_LOW, false, null)
+        tts.voice = voice1
+        tts.speak(input, TextToSpeech.QUEUE_ADD, null)
 
     }
 
