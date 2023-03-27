@@ -63,12 +63,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.907"/>
 
+
+
+
     <Spinner
         android:id="@+id/spinner"
         android:layout_width="163dp"
         android:layout_height="49dp"
         android:background="#00A3FF"
-        android:contentDescription="Select a choice:"
+        android:contentDescription="choice:"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.532"
@@ -76,12 +79,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.551" />
 
+
+
+
     <Spinner
         android:id="@+id/olspinner"
         android:layout_width="163dp"
         android:layout_height="48dp"
         android:background="#00A3FF"
-        android:contentDescription="Select a choice:"
+        android:contentDescription="output"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.532"
@@ -183,12 +189,42 @@
         app:layout_constraintVertical_bias="0.798" />
 
     <ImageButton
+        android:id="@+id/spinoptions2"
+        android:layout_width="42dp"
+        android:layout_height="34dp"
+        android:backgroundTint="#00A3FF"
+        android:contentDescription="spinoptions2"
+        android:src="@drawable/baseline_arrow_drop_down_black_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.685"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.365"
+        tools:ignore="TouchTargetSizeCheck" />
+
+    <ImageButton
+        android:id="@+id/spinoptions3"
+        android:layout_width="42dp"
+        android:layout_height="34dp"
+        android:backgroundTint="#00A3FF"
+        android:contentDescription="spinoptions3"
+
+        android:src="@drawable/baseline_arrow_drop_down_black_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.685"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.55"
+        tools:ignore="TouchTargetSizeCheck" />
+
+    <ImageButton
         android:id="@+id/backbutton"
         android:layout_width="50dp"
         android:layout_height="48dp"
         android:backgroundTint="#00A3FF"
-        android:contentDescription="@string/app_name"
-        android:hint="settings"
+        android:contentDescription="back"
 
         android:src="@drawable/baseline_arrow_back_black_24"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -197,5 +233,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.023" />
+
+
+    <ImageButton
+        android:id="@+id/spinoptions"
+        android:layout_width="42dp"
+        android:layout_height="34dp"
+        android:backgroundTint="#00A3FF"
+        android:contentDescription="@string/app_name"
+
+        android:src="@drawable/baseline_arrow_drop_down_black_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.685"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.202"
+        tools:ignore="TouchTargetSizeCheck" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

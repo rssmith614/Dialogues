@@ -1,27 +1,21 @@
 package com.example.dialogues
-import android.content.Context
 import android.content.SharedPreferences
-import android.graphics.Color
-import android.graphics.PorterDuff
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.speech.tts.TextToSpeech
-import android.speech.tts.Voice
-import android.util.Log
 import android.view.View
 import android.widget.*
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.recyclerview.widget.RecyclerView.LayoutManager.LayoutPrefetchRegistry
-import com.google.android.material.switchmaterial.SwitchMaterial
-import java.util.*
 
 class Settings : AppCompatActivity() {
 
     private lateinit var voiceSpinner: Spinner
     private lateinit var ilSpinner: Spinner
     private lateinit var olSpinner: Spinner
+    private lateinit var dropdown1: ImageButton
+    private lateinit var dropdown2: ImageButton
+    private lateinit var dropdown3: ImageButton
     private  var selectedVoice: String = ""
     private var selectedil: String = ""
     private var selectedol: String = ""
@@ -35,13 +29,30 @@ class Settings : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings_tts)
-        voiceSpinner = findViewById<Spinner>(R.id.spinner)
-        ilSpinner = findViewById<Spinner>(R.id.ilspinner)
-        olSpinner = findViewById<Spinner>(R.id.olspinner)
+        voiceSpinner = findViewById(R.id.spinner)
+        ilSpinner = findViewById(R.id.ilspinner)
+        olSpinner = findViewById(R.id.olspinner)
+        dropdown1 = findViewById(R.id.spinoptions)
+        dropdown2 = findViewById(R.id.spinoptions2)
+        dropdown3 = findViewById(R.id.spinoptions3)
+
+
+
+
         prefs = PreferenceManager.getDefaultSharedPreferences(this)
         prefs2 = PreferenceManager.getDefaultSharedPreferences(this)
 
+        dropdown1.setOnClickListener{
+            ilSpinner.performClick()
+        }
 
+        dropdown2.setOnClickListener{
+            olSpinner.performClick()
+        }
+
+        dropdown3.setOnClickListener{
+            voiceSpinner.performClick()
+        }
         val speedBar = findViewById<SeekBar>(R.id.speedbar)
         val pitchBar = findViewById<SeekBar>(R.id.pitchbar)
 
