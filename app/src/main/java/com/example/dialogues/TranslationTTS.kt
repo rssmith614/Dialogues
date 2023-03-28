@@ -34,6 +34,7 @@ class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
     private var pitchvoice: Float = 0.0f
     private var talkspeed: Float = 0.0f
     private val barStarter = 50
+    private lateinit var button: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,13 +54,20 @@ class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         val displayText = findViewById<TextView>(R.id.TranslateTTS_textView)
 
-        val button = findViewById<Button>(R.id.clickButton)
+        button = findViewById<ImageButton>(R.id.clickButton)
 
         val tts = TextToSpeech(this, this, "com.google.android.tts")
-
+        var isSpeaking = false
         button.setOnClickListener{
-            if (testString != null) {
-                translateString(tts, displayText, testString)
+            if (isSpeaking) {
+                tts.stop()
+                isSpeaking = false
+            } else {
+                if (testString != null) {
+                    translateString(tts, displayText, testString) // Call your translateString() method
+                    isSpeaking = true
+
+                }
             }
         }
 
@@ -85,7 +93,7 @@ class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         }
     }
-    
+
 
     //Currently function takes a TextView to display text, modify parameters as needed
     fun translateString(tts: TextToSpeech, displayText: TextView, input: String){
