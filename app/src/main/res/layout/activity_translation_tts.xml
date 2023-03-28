@@ -10,7 +10,7 @@
         android:id="@+id/settingbutton"
         android:layout_width="50dp"
         android:layout_height="48dp"
-        android:backgroundTint="#00A3FF"
+        android:background="@drawable/button_background"
         android:contentDescription="@string/app_name"
         android:hint="settings"
         android:src="@drawable/baseline_settings_black_24dp"
@@ -60,7 +60,7 @@
         android:id="@+id/backbutton"
         android:layout_width="50dp"
         android:layout_height="48dp"
-        android:backgroundTint="#00A3FF"
+        android:background="@drawable/button_background"
         android:contentDescription="@string/app_name"
         android:hint="settings"
 
