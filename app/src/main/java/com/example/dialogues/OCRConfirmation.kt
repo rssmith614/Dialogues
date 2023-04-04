@@ -9,8 +9,10 @@ import android.os.Bundle
 import android.os.StrictMode
 import android.util.Log
 import android.view.MotionEvent
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.ui.AppBarConfiguration
 import com.example.dialogues.databinding.ActivityOcrconfirmationBinding
@@ -82,6 +84,15 @@ class OCRConfirmation : AppCompatActivity() {
             Log.i(TAG, "Calling translation activity: $result")
         }
 
+        findViewById<Button>(R.id.back_button).setOnClickListener {
+            onBackPressed()
+        }
+
+        findViewById<Button>(R.id.settings_button).setOnClickListener {
+//            val intent = Intent(this, Settings::class.java)
+//            startActivity(intent)
+        }
+
         // pull "image" from process that started the activity to call OCR
         val intentUri = intent.extras?.getString("imglocation")!!
 //        val resourceId = R.drawable.stc_sign
@@ -136,11 +147,8 @@ class OCRConfirmation : AppCompatActivity() {
 
     // Process success state of text detection
     private fun resultText(b: Boolean) {
-        if (b) {
-            Log.e(TAG, "No text found")
-        } else {
-            Log.i(TAG, "Text found")
-        }
+        // hide loading icon, since image has been loaded and OCR call has finished
+        findViewById<RelativeLayout>(R.id.loadingPanel).visibility = View.GONE
     }
 
     private fun Bitmap.rotate(degrees: Float): Bitmap {
