@@ -29,6 +29,7 @@ class Settings : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings_tts)
+
         voiceSpinner = findViewById(R.id.spinner)
         ilSpinner = findViewById(R.id.ilspinner)
         olSpinner = findViewById(R.id.olspinner)
@@ -146,8 +147,11 @@ class Settings : AppCompatActivity() {
         }
 
         val switchButton = findViewById<Switch>(R.id.switcher)
+        val pauseSpeakPreferences = getSharedPreferences("pauseSpeakPrefs", MODE_PRIVATE)
+        val isSwitched = pauseSpeakPreferences.getBoolean("switched", false)
+        switchButton.isChecked = isSwitched
+
         switchButton.setOnCheckedChangeListener { _, isChecked ->
-            val pauseSpeakPreferences = getSharedPreferences("pauseSpeakPrefs", MODE_PRIVATE)
             val pauseSpeakeditor = pauseSpeakPreferences.edit()
             if (isChecked) {
                 pauseSpeakeditor.putBoolean("switched", true)
@@ -155,21 +159,27 @@ class Settings : AppCompatActivity() {
                 pauseSpeakeditor.remove("switched")
             }
             pauseSpeakeditor.apply()
-        }
+        } 
         //Dark/light mode code
         val switchbtn = findViewById<Switch>(R.id.switch_dark_mode)
-        switchbtn.setOnCheckedChangeListener{_, isChecked ->
+        val appCompatDelegate = AppCompatDelegate.getDefaultNightMode()
+        val isNightModeEnabled = appCompatDelegate == AppCompatDelegate.MODE_NIGHT_YES
+        switchbtn.isChecked = isNightModeEnabled
 
-
-            if (switchbtn.isChecked){
+        switchbtn.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                switchbtn.text = "Disable dark mode"
-            }
-            else{
+            } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                switchbtn.text ="Enable dark mode"
+
             }
+
+            val darkModePreferences = getSharedPreferences("darkModePrefs", MODE_PRIVATE)
+            val darkModeEditor = darkModePreferences.edit()
+            darkModeEditor.putBoolean("isNightModeEnabled", isChecked)
+            darkModeEditor.apply()
         }
+
 
     }
 

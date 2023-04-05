@@ -70,8 +70,21 @@ class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
                 }
             }
         }
+        val darkModePreferences = getSharedPreferences("darkModePrefs", MODE_PRIVATE)
+        val isNightModeEnabled = darkModePreferences.getBoolean("isNightModeEnabled", false)
 
+        if (isNightModeEnabled) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+        //val box = findViewById<View>(R.id.box)
 
+        //if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+         //   box.setBackgroundColor(resources.getColor(R.color.dark_mode_color))
+       // } else {
+        //    box.setBackgroundColor(resources.getColor(R.color.notwhite))
+        //}
     }
 
     override fun onInit(status: Int) {
@@ -274,5 +287,6 @@ class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
 
 
     }
+
 
 }
