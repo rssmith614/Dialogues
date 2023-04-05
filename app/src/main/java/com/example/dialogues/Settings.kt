@@ -159,7 +159,14 @@ class Settings : AppCompatActivity() {
                 pauseSpeakeditor.remove("switched")
             }
             pauseSpeakeditor.apply()
-        } 
+        }
+        val box = findViewById<View>(R.id.box)
+
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+            box.setBackgroundColor(resources.getColor(R.color.dark_mode_color))
+        } else {
+            box.setBackgroundColor(resources.getColor(R.color.notwhite))
+        }
         //Dark/light mode code
         val switchbtn = findViewById<Switch>(R.id.switch_dark_mode)
         val appCompatDelegate = AppCompatDelegate.getDefaultNightMode()
