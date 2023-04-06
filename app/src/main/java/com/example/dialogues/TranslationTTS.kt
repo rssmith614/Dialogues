@@ -6,13 +6,16 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Vibrator
 import android.preference.PreferenceManager
 import android.speech.tts.TextToSpeech
 import android.speech.tts.Voice
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatDelegate
 import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.Translation
@@ -21,13 +24,14 @@ import java.util.*
 
 
 //KNOWN ISSUES:
-//BACK BUTTON FOR SETTINGS WORKS BUT DOESNT REMEMBER THE TEXT ITS SUPPOSE TO SPEAK (STATE ISSUE)
-
-
+//SETTINGS BUTTON IN HAPTIC MODE VIBRATES EVEN WHEN THERES NO VIBRATE CODE ATTACHED TO IT
+//WHEN SWITCHING LANGUAGE PREFERENCES AND TTS VOICE THEN PRESSING THE TTS SPEAK BUTTON, IT NEEDS TO BE PRESSED TWICE IN ORDER TO WORK. ALSO THERE IS A SMALL (3-5 SECOND) DELAY WHEN THE USER PRESSES THE SPEAK BUTTON
+//LIGHT AND DARK MODE CHANGES COLORS OF BUTTONS IN CAMERA AND OCR SCREEN MAKING THEM VISUALLY UNAPPEALING. (SCUFFED & TIME LIMITED SUGGESTION: REMOVE BACK BUTTON ON TTS/TRANSLATION PAGE TO SOLVE ISSUE)
+//TOGGLING LIGHT/DARK MODE VIBRATES THREE TIMES (BUG COULD BE PASSED OFF AS A FEATURE :) )
 class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
     private lateinit var tts: TextToSpeech
-    private lateinit var prefs: SharedPreferences
-    private lateinit var prefs2: SharedPreferences
+    private lateinit var talkspeedPrefs: SharedPreferences
+    private lateinit var pitchPrefs: SharedPreferences
     private var selectedvoice: String = ""
     private var selectedil: String = ""
     private var selectedol: String = ""
@@ -41,10 +45,19 @@ class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
         setContentView(R.layout.activity_translation_tts)
 
         tts = TextToSpeech(this, this, "com.google.android.tts")
-        prefs = PreferenceManager.getDefaultSharedPreferences(this) // Initialize prefs
-        prefs2 = PreferenceManager.getDefaultSharedPreferences(this) // Initialize prefs
-        talkspeed = prefs.getInt("speed", barStarter).toFloat()
-        pitchvoice = prefs2.getInt("pitch", barStarter).toFloat()/50.0f
+        talkspeedPrefs = PreferenceManager.getDefaultSharedPreferences(this) // Initialize prefs
+        pitchPrefs = PreferenceManager.getDefaultSharedPreferences(this) // Initialize prefs
+        talkspeed = talkspeedPrefs.getInt("speed", barStarter).toFloat()
+        pitchvoice = pitchPrefs.getInt("pitch", barStarter).toFloat()/50.0f
+        val hapticFeedbackPreferences = getSharedPreferences("hfPrefs", Context.MODE_PRIVATE)
+        val HapticFeedbackOn = hapticFeedbackPreferences.getBoolean("HapticFeedbackEnabled", false)
+        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        fun vibrateTime() {
+            if (HapticFeedbackOn) {
+                vibrator.vibrate(50)
+            }
+        }
+
 
 
         val testString = intent.extras?.getString("Text", "")
@@ -57,15 +70,17 @@ class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
         button = findViewById<ImageButton>(R.id.clickButton)
 
         val tts = TextToSpeech(this, this, "com.google.android.tts")
-        var isSpeaking = false
+        var speakingChecker = false
         button.setOnClickListener{
-            if (isSpeaking) {
+            if (speakingChecker) {
+                vibrateTime()
                 tts.stop()
-                isSpeaking = false
+                speakingChecker = false
             } else {
                 if (testString != null) {
-                    translateString(tts, displayText, testString) // Call your translateString() method
-                    isSpeaking = true
+                    vibrateTime()
+                    translateString(tts, displayText, testString)
+                    speakingChecker = true
 
                 }
             }
@@ -81,9 +96,9 @@ class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
         //val box = findViewById<View>(R.id.box)
 
         //if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-         //   box.setBackgroundColor(resources.getColor(R.color.dark_mode_color))
-       // } else {
-        //    box.setBackgroundColor(resources.getColor(R.color.notwhite))
+          // box.setBackgroundColor(resources.getColor(R.color.dark_mode_color))
+        //} else {
+         //  box.setBackgroundColor(resources.getColor(R.color.notwhite))
         //}
     }
 
@@ -143,10 +158,10 @@ class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
             "Spanish" -> TranslateLanguage.SPANISH
             "French" -> TranslateLanguage.FRENCH
             "German" -> TranslateLanguage.GERMAN
-            "Hindi" -> TranslateLanguage.HINDI
-            "Chinese" -> TranslateLanguage.CHINESE
-            "Japanese" -> TranslateLanguage.JAPANESE
-            "Arabic" -> TranslateLanguage.ARABIC
+            "Portuguese" -> TranslateLanguage.PORTUGUESE
+            "Italian" -> TranslateLanguage.ITALIAN
+            "Polish" -> TranslateLanguage.POLISH
+            "Romanian" -> TranslateLanguage.ROMANIAN
             else -> TranslateLanguage.ENGLISH // Default to English if no language is selected
         }
 
@@ -181,32 +196,32 @@ class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
                     .build()
                 translate(options)
             }
-            "Hindi"->{
+            "Portuguese"->{
                 val options = TranslatorOptions.Builder()
                     .setSourceLanguage(sourceLang)
-                    .setTargetLanguage(TranslateLanguage.HINDI)
+                    .setTargetLanguage(TranslateLanguage.PORTUGUESE)
                     .build()
                 translate(options)
             }
 
-            "Chinese"->{
+            "Italian"->{
                 val options = TranslatorOptions.Builder()
                     .setSourceLanguage(sourceLang)
-                    .setTargetLanguage(TranslateLanguage.CHINESE)
+                    .setTargetLanguage(TranslateLanguage.ITALIAN)
                     .build()
                 translate(options)
             }
-            "Japanese"->{
+            "Polish"->{
                 val options = TranslatorOptions.Builder()
                     .setSourceLanguage(sourceLang)
-                    .setTargetLanguage(TranslateLanguage.JAPANESE)
+                    .setTargetLanguage(TranslateLanguage.POLISH)
                     .build()
                 translate(options)
             }
-            "Arabic"->{
+            "Romanian"->{
                 val options = TranslatorOptions.Builder()
                     .setSourceLanguage(sourceLang)
-                    .setTargetLanguage(TranslateLanguage.ARABIC)
+                    .setTargetLanguage(TranslateLanguage.ROMANIAN)
                     .build()
                 translate(options)
             }
@@ -217,11 +232,11 @@ class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
 
 
     fun speakString(tts: TextToSpeech, input: String){
-        val talkspeed = prefs.getInt("speed", barStarter ).toFloat()/50.0f
+        val talkspeed = talkspeedPrefs.getInt("speed", barStarter ).toFloat()/50.0f
         if (talkspeed == 0f){
             tts.setSpeechRate(0.10f)
         }
-        val pitchvoice = prefs2.getInt("pitch", barStarter ).toFloat()/50.0f
+        val pitchvoice = pitchPrefs.getInt("pitch", barStarter ).toFloat()/50.0f
         if(pitchvoice == 0f){
             tts.setPitch(0.10f)
         }
@@ -233,42 +248,42 @@ class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
        
         when (selectedvoice) {
             "Female 1 (UK)" -> { //BRITISH WOMEN
-                val voice1 = Voice("en-gb-x-gba-network", Locale.US, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)
-                tts.setVoice(voice1)
+                val chosenVoice = Voice("en-gb-x-gba-network", Locale.US, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)
+                tts.setVoice(chosenVoice)
 
             }
             "Female 2 (US)" -> { //American WOMEN
-                val voice1 = Voice("en-us-x-tpf-local", Locale.US, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)
-                tts.setVoice(voice1)
+                val chosenVoice = Voice("en-us-x-tpf-local", Locale.US, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)
+                tts.setVoice(chosenVoice)
 
             }
             "Female 3 (IN)" -> { //INDIAN WOMEN
-                val voice1 = Voice("en-in-x-enc-network", Locale.US, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)
-                tts.setVoice(voice1)
+                val chosenVoice = Voice("en-in-x-enc-network", Locale.US, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)
+                tts.setVoice(chosenVoice)
 
             }
             "Female 4 (ES)" -> { //SPANISH MAN
                 val locSpanish = Locale("spa","MEX")
-                val voice1 = Voice("es-es-x-eee-local", locSpanish, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)
-                tts.setVoice(voice1)
+                val chosenVoice = Voice("es-es-x-eee-local", locSpanish, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)
+                tts.setVoice(chosenVoice)
             }
 
             "Male 1 (UK)" -> { //BRITISH MAN
-                val voice1 = Voice("en-gb-x-gbb-local", Locale.US, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)
-                tts.setVoice(voice1)
+                val chosenVoice = Voice("en-gb-x-gbb-local", Locale.US, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)
+                tts.setVoice(chosenVoice)
             }
             "Male 2 (US)" -> { //AMERICAN MAN
-                val voice1 = Voice("en-us-x-iol-local", Locale.US, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)
-                tts.setVoice(voice1)
+                val chosenVoice = Voice("en-us-x-iol-local", Locale.US, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)
+                tts.setVoice(chosenVoice)
             }
             "Male 3 (IN)" -> { //INDIAN MAN
-                val voice1 = Voice("en-in-x-ene-network", Locale.US, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)
-                tts.setVoice(voice1)
+                val chosenVoice = Voice("en-in-x-ene-network", Locale.US, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)
+                tts.setVoice(chosenVoice)
             }
             "Male 4 (ES)" -> { //SPANISH MAN
                 val locSpanish = Locale("spa","MEX")
-                val voice1 = Voice("es-es-x-eef-local", locSpanish, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)
-                tts.setVoice(voice1)
+                val chosenVoice = Voice("es-es-x-eef-local", locSpanish, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)
+                tts.setVoice(chosenVoice)
             }
         }
         val pauseSpeakPreferences = getSharedPreferences("pauseSpeakPrefs", MODE_PRIVATE)

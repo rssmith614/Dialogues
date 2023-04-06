@@ -74,7 +74,21 @@
         app:layout_constraintVertical_bias="0.907"/>
 
 
+    <Switch
+        android:id="@+id/hapticswitch"
+        android:layout_width="225dp"
+        android:layout_height="52dp"
+        android:checked="false"
+        android:fontFamily="@font/lexend"
+        android:text="Haptic Feedback Mode"
 
+        android:trackTint="#00A3FF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.058"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.998" />
 
     <Spinner
         android:id="@+id/spinner"
