@@ -32,57 +32,54 @@ class Settings : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings_tts)
-
+        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         voiceSpinner = findViewById(R.id.spinner)
         ilSpinner = findViewById(R.id.ilspinner)
         olSpinner = findViewById(R.id.olspinner)
         dropdown1 = findViewById(R.id.spinoptions)
         dropdown2 = findViewById(R.id.spinoptions2)
         dropdown3 = findViewById(R.id.spinoptions3)
-
-
-        var haptic_feedback = findViewById<Switch>(R.id.hapticswitch)
-
-        val hapticFeedbackPreferences = getSharedPreferences("hfPrefs", Context.MODE_PRIVATE)
-        HapticFeedbackOn = hapticFeedbackPreferences.getBoolean("HapticFeedbackEnabled", false)
-        haptic_feedback.isChecked = HapticFeedbackOn
-        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        haptic_feedback.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                HapticFeedbackOn = true
-                 vibrator.vibrate(50)
-                }
-            else {
-                vibrator.cancel()
-                HapticFeedbackOn = false
-                }
-            hapticFeedbackPreferences.edit().putBoolean("HapticFeedbackEnabled", HapticFeedbackOn).apply()
-            }
-
         fun vibrateDevice() {
             if (HapticFeedbackOn == true) {
                 vibrator.vibrate(50)
             }
         }
 
+        var haptic_feedback = findViewById<Switch>(R.id.hapticswitch)
+
+        val hapticFeedbackPreferences = getSharedPreferences("hfPrefs", Context.MODE_PRIVATE)
+        HapticFeedbackOn = hapticFeedbackPreferences.getBoolean("HapticFeedbackEnabled", false)
+        haptic_feedback.isChecked = HapticFeedbackOn
+        haptic_feedback.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                HapticFeedbackOn = true
+                vibrateDevice()
+                }
+            else {
+                HapticFeedbackOn = false
+                }
+            hapticFeedbackPreferences.edit().putBoolean("HapticFeedbackEnabled", HapticFeedbackOn).apply()
+            }
+
+
         talkspeedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
         pitchPrefs = PreferenceManager.getDefaultSharedPreferences(this)
 
         dropdown1.setOnClickListener{
             ilSpinner.performClick()
-            vibrateDevice()
+            //vibrateDevice()
 
         }
 
         dropdown2.setOnClickListener{
             olSpinner.performClick()
-            vibrateDevice()
+            //vibrateDevice()
 
         }
 
         dropdown3.setOnClickListener{
             voiceSpinner.performClick()
-            vibrateDevice()
+            //vibrateDevice()
 
         }
         val speedBar = findViewById<SeekBar>(R.id.speedbar)
@@ -137,8 +134,8 @@ class Settings : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
-        val olOptions =  arrayOf("English", "Spanish", "French", "German", "Portuguese", "Italian", "Polish", "Romanian")
-        val outputAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, ilOptions)
+        val olOptions =  arrayOf("English", "Spanish", "French", "German", "Portuguese", "Italian", "Polish", "Romanian", "Japanese", "Mandarin", "Russian" )
+        val outputAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, olOptions)
         //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         olSpinner.adapter = outputAdapter
         olPreferences = getSharedPreferences("olPreferences", MODE_PRIVATE)

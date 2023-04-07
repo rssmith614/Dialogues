@@ -25,9 +25,9 @@ import java.util.*
 
 //KNOWN ISSUES:
 //SETTINGS BUTTON IN HAPTIC MODE VIBRATES EVEN WHEN THERES NO VIBRATE CODE ATTACHED TO IT
-//WHEN SWITCHING LANGUAGE PREFERENCES AND TTS VOICE THEN PRESSING THE TTS SPEAK BUTTON, IT NEEDS TO BE PRESSED TWICE IN ORDER TO WORK. ALSO THERE IS A SMALL (3-5 SECOND) DELAY WHEN THE USER PRESSES THE SPEAK BUTTON
+//WHEN A USER PRESSES THE TTS BUTTON IT PRODUCES SOUND! BUT THEN PRESSING THE TTS SPEAK BUTTON AGAIN, IT NEEDS TO BE PRESSED TWICE IN ORDER TO WORK.THIS IS BECAUSE OF THE STOP TTS VOICE FEATURE. ONCE THE TTS VOICE IS FINISHED, THE USER PRESSES IT AGAIN AND IS ACTUALLY PRESSING THE STOP BUTTON INSTEAD OF SPEAK. STOP BUTTON SHOULD ONLY BE USED TO INTERRUPT THE TTS VOICE THAT IS SPEAKING
 //LIGHT AND DARK MODE CHANGES COLORS OF BUTTONS IN CAMERA AND OCR SCREEN MAKING THEM VISUALLY UNAPPEALING. (SCUFFED & TIME LIMITED SUGGESTION: REMOVE BACK BUTTON ON TTS/TRANSLATION PAGE TO SOLVE ISSUE)
-//TOGGLING LIGHT/DARK MODE VIBRATES THREE TIMES (BUG COULD BE PASSED OFF AS A FEATURE :) )
+//TOGGLING LIGHT/DARK MODE VIBRATES TWO TIMES (BUG COULD BE PASSED OFF AS A FEATURE :) )
 class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
     private lateinit var tts: TextToSpeech
     private lateinit var talkspeedPrefs: SharedPreferences
@@ -49,6 +49,11 @@ class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
         pitchPrefs = PreferenceManager.getDefaultSharedPreferences(this) // Initialize prefs
         talkspeed = talkspeedPrefs.getInt("speed", barStarter).toFloat()
         pitchvoice = pitchPrefs.getInt("pitch", barStarter).toFloat()/50.0f
+
+        val ilPreferences = getSharedPreferences("ilPreferences", MODE_PRIVATE)
+        selectedil = ilPreferences.getString("Selectedil","").toString()
+
+
         val hapticFeedbackPreferences = getSharedPreferences("hfPrefs", Context.MODE_PRIVATE)
         val HapticFeedbackOn = hapticFeedbackPreferences.getBoolean("HapticFeedbackEnabled", false)
         val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
@@ -150,8 +155,6 @@ class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
                 .addOnFailureListener { Log.d(ContentValues.TAG, "Translate Failed") }
 
         }
-        val ilPreferences = getSharedPreferences("ilPreferences", MODE_PRIVATE)
-        selectedil = ilPreferences.getString("Selectedil","").toString()
 
         val sourceLang: String = when(selectedil) {
             "English" -> TranslateLanguage.ENGLISH
@@ -222,6 +225,27 @@ class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
                 val options = TranslatorOptions.Builder()
                     .setSourceLanguage(sourceLang)
                     .setTargetLanguage(TranslateLanguage.ROMANIAN)
+                    .build()
+                translate(options)
+            }
+            "Japanese"->{
+                val options = TranslatorOptions.Builder()
+                    .setSourceLanguage(sourceLang)
+                    .setTargetLanguage(TranslateLanguage.JAPANESE)
+                    .build()
+                translate(options)
+            }
+            "Mandarin"->{
+                val options = TranslatorOptions.Builder()
+                    .setSourceLanguage(sourceLang)
+                    .setTargetLanguage(TranslateLanguage.CHINESE)
+                    .build()
+                translate(options)
+            }
+            "Russian"->{
+                val options = TranslatorOptions.Builder()
+                    .setSourceLanguage(sourceLang)
+                    .setTargetLanguage(TranslateLanguage.RUSSIAN)
                     .build()
                 translate(options)
             }

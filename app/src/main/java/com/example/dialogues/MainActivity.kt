@@ -3,6 +3,7 @@ package com.example.dialogues
 import android.Manifest
 
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -11,13 +12,17 @@ import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
 import android.os.StrictMode.VmPolicy
+import android.os.Vibrator
 import android.provider.MediaStore
+import android.speech.tts.TextToSpeech
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCapture.OutputFileResults
@@ -49,6 +54,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var cameraExecutor: ExecutorService
 
     private lateinit var outputDirectory: File
+
 
 //    private var URI = ""
 
@@ -187,20 +193,61 @@ class MainActivity : AppCompatActivity() {
         } else {
             requestPermissions()
         }
-
         outputDirectory = getOutputDirectory()
         cameraExecutor = Executors.newSingleThreadExecutor()
 
-        var camera_Click = findViewById<Button>(R.id.camera_capture_button)
 
+
+        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        fun vibrateTime() {
+            val hapticFeedbackPreferences = getSharedPreferences("hfPrefs", Context.MODE_PRIVATE)
+            val HapticFeedbackOn = hapticFeedbackPreferences.getBoolean("HapticFeedbackEnabled", false)
+            if (HapticFeedbackOn) {
+                vibrator.vibrate(50)
+            }
+        }
+        var camera_Click = findViewById<Button>(R.id.camera_capture_button)
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+            camera_Click.setBackgroundColor(resources.getColor(R.color.dark_mode_color))
+        } else {
+            camera_Click.setBackgroundColor(resources.getColor(R.color.notwhite))
+        }
         camera_Click.setOnClickListener {
             var intent = Intent(this, ImageScreen::class.java)
-
             takePhoto()
-
+            vibrateTime()
             //Log.d(TAG, " code 234: $URI")
 
 
+        }
+        val ilPreferences = getSharedPreferences("ilPreferences", MODE_PRIVATE)
+        val selectedil = ilPreferences.getString("Selectedil","").toString()
+        val olPreferences = getSharedPreferences("olPreferences", MODE_PRIVATE)
+        val selectedol = olPreferences.getString("Selectedol","").toString()
+
+        val sharedPreferences = getSharedPreferences("VoicePreferences", MODE_PRIVATE)
+        val selectedvoice = sharedPreferences.getString("SelectedVoice", "").toString()
+
+
+        val pauseSpeakPreferences = getSharedPreferences("pauseSpeakPrefs", MODE_PRIVATE)
+        val pauseSpeakPrefSwitch = pauseSpeakPreferences.getBoolean("switched", false)
+
+        val darkModePreferences = getSharedPreferences("darkModePrefs", MODE_PRIVATE)
+        val isNightModeEnabled = darkModePreferences.getBoolean("isNightModeEnabled", false)
+
+        if (isNightModeEnabled) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+
+        val settingsbind = findViewById<ImageButton>(R.id.settingbutton)
+
+        settingsbind.setOnClickListener {
+            val intent2 = Intent(this, Settings::class.java)
+            startActivity(intent2)
+
+            //textView.setText("")
         }
     }
 
