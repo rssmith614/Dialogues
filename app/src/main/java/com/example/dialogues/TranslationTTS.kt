@@ -24,10 +24,8 @@ import java.util.*
 
 
 //KNOWN ISSUES:
-//SETTINGS BUTTON IN HAPTIC MODE VIBRATES EVEN WHEN THERES NO VIBRATE CODE ATTACHED TO IT
-//WHEN A USER PRESSES THE TTS BUTTON IT PRODUCES SOUND! BUT THEN PRESSING THE TTS SPEAK BUTTON AGAIN, IT NEEDS TO BE PRESSED TWICE IN ORDER TO WORK.THIS IS BECAUSE OF THE STOP TTS VOICE FEATURE. ONCE THE TTS VOICE IS FINISHED, THE USER PRESSES IT AGAIN AND IS ACTUALLY PRESSING THE STOP BUTTON INSTEAD OF SPEAK. STOP BUTTON SHOULD ONLY BE USED TO INTERRUPT THE TTS VOICE THAT IS SPEAKING
-//LIGHT AND DARK MODE CHANGES COLORS OF BUTTONS IN CAMERA AND OCR SCREEN MAKING THEM VISUALLY UNAPPEALING. (SCUFFED & TIME LIMITED SUGGESTION: REMOVE BACK BUTTON ON TTS/TRANSLATION PAGE TO SOLVE ISSUE)
-//TOGGLING LIGHT/DARK MODE VIBRATES TWO TIMES (BUG COULD BE PASSED OFF AS A FEATURE :) )
+//SETTINGS BUTTON IN HAPTIC MODE VIBRATES EVEN WHEN THERES NO VIBRATE CODE ATTACHED TO IT (DOESNT NEED TO BE NECESSARILY FIXED)
+//TOGGLING LIGHT/DARK MODE VIBRATES TWO TIMES (BUG COULD BE PASSED OFF AS A FEATURE :) ) (DOESNT NEED TO BE NECESSARILY FIXED)
 class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
     private lateinit var tts: TextToSpeech
     private lateinit var talkspeedPrefs: SharedPreferences
@@ -75,17 +73,14 @@ class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
         button = findViewById<ImageButton>(R.id.clickButton)
 
         val tts = TextToSpeech(this, this, "com.google.android.tts")
-        var speakingChecker = false
         button.setOnClickListener{
-            if (speakingChecker) {
+            if (tts.isSpeaking) {
                 vibrateTime()
                 tts.stop()
-                speakingChecker = false
             } else {
                 if (testString != null) {
                     vibrateTime()
                     translateString(tts, displayText, testString)
-                    speakingChecker = true
 
                 }
             }
@@ -101,10 +96,10 @@ class TranslationTTS : AppCompatActivity(), TextToSpeech.OnInitListener {
         //val box = findViewById<View>(R.id.box)
 
         //if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-          // box.setBackgroundColor(resources.getColor(R.color.dark_mode_color))
-        //} else {
-         //  box.setBackgroundColor(resources.getColor(R.color.notwhite))
-        //}
+         // box.setBackgroundColor(resources.getColor(R.color.dark_mode_color))
+       //} else {
+           // box.setBackgroundColor(resources.getColor(R.color.notwhite))
+       //}
     }
 
     override fun onInit(status: Int) {

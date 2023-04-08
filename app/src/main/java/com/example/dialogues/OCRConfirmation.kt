@@ -1,17 +1,21 @@
 package com.example.dialogues
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.graphics.*
 import android.media.ExifInterface
 import android.net.Uri
 import android.os.Bundle
 import android.os.StrictMode
+import android.os.Vibrator
 import android.util.Log
 import android.view.MotionEvent
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.ui.AppBarConfiguration
 import com.example.dialogues.databinding.ActivityOcrconfirmationBinding
 import com.google.mlkit.vision.common.InputImage
@@ -61,7 +65,19 @@ class OCRConfirmation : AppCompatActivity() {
 
             true
         }
-
+        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        fun vibrateTime() {
+            val hapticFeedbackPreferences = getSharedPreferences("hfPrefs", Context.MODE_PRIVATE)
+            val HapticFeedbackOn = hapticFeedbackPreferences.getBoolean("HapticFeedbackEnabled", false)
+            if (HapticFeedbackOn) {
+                vibrator.vibrate(50)
+            }
+        }
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+            findViewById<Button>(R.id.confirm).setBackgroundColor(resources.getColor(R.color.light_blue))
+        } else {
+            findViewById<Button>(R.id.confirm).setBackgroundColor(resources.getColor(R.color.light_blue))
+        }
         // assign button to next activity and pass selected text to it
         findViewById<Button>(R.id.confirm).setOnClickListener {
             // take text only from boxes still selected
@@ -72,9 +88,11 @@ class OCRConfirmation : AppCompatActivity() {
                     result += "$cleanLine "
                 }
             }
+
             // call Translation activity
             val intent = Intent(this, TranslationTTS::class.java).putExtra("Text", result)
             startActivity(intent)
+            vibrateTime()
 
             Log.i(TAG, "Calling translation activity: $result")
         }

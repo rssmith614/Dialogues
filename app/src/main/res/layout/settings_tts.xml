@@ -62,7 +62,6 @@
         android:layout_width="188dp"
         android:layout_height="52dp"
         android:checked="false"
-        android:text= "Light/Dark Mode"
         android:fontFamily="@font/lexend"
 
         android:trackTint="#00A3FF"
@@ -80,7 +79,6 @@
         android:layout_height="52dp"
         android:checked="false"
         android:fontFamily="@font/lexend"
-        android:text="Haptic Feedback Mode"
 
         android:trackTint="#00A3FF"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -198,7 +196,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.475" />
 
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -211,6 +208,33 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.798" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lexend"
+        android:text="Light/Dark Mode"
+        android:textColor="?android:textColorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.04"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.887" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lexend"
+        android:text="Haptic Feedback Mode"
+        android:textColor="?android:textColorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.055"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.977" />
 
     <ImageButton
         android:id="@+id/spinoptions2"
