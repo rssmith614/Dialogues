@@ -4,4 +4,14 @@
     <string name="confirm">Confirm</string>
     <string name="back">Back</string>
     <string name="settings">Settings</string>
+    <string-array name="LanguageOptions">
+        <item>English</item>
+        <item>Spanish</item>
+        <item>French</item>
+        <item>German</item>
+        <item>Hindi</item>
+        <item>Chinese</item>
+        <item>Japanese</item>
+        <item>Arabic</item>
+    </string-array>
 </resources>

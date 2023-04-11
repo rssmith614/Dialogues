@@ -5,8 +5,6 @@
     <uses-feature android:name="android.hardware.camera.any" />
 
     <uses-permission android:name="android.permission.CAMERA" />
-
-
     <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-permission android:name="android.permission.VIBRATE"/>
@@ -21,6 +19,9 @@
         android:theme="@style/Theme.Dialogues"
         tools:targetApi="31">
         <activity android:name=".Settings" android:parentActivityName=".TranslationTTS"/>
+        <activity
+            android:name=".TranslationScreen"
+            android:exported="false" />
         <activity
             android:name=".TranslationTTS"
             android:exported="false" />

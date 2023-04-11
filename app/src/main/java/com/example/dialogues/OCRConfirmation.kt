@@ -94,7 +94,7 @@ class OCRConfirmation : AppCompatActivity() {
             }
 
             // call Translation activity
-            val intent = Intent(this, TranslationTTS::class.java).putExtra("Text", result)
+            val intent = Intent(this, TranslationScreen::class.java).putExtra("Text", result)
             startActivity(intent)
             vibrateTime()
         }
