@@ -3,10 +3,8 @@ package com.example.dialogues
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.*
-import android.media.ExifInterface
 import android.net.Uri
 import android.os.Bundle
-import android.os.StrictMode
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
@@ -73,15 +71,12 @@ class OCRConfirmation : AppCompatActivity() {
             var result = ""
             for ((i, line) in textBoxes.withIndex()) {
                 if (selectedStates[i]) {
-                    val cleanLine = line.replace('\n', ' ')
-                    result += "$cleanLine "
+                    result += "$line "
                 }
             }
             // call Translation activity
             val intent = Intent(this, TranslationTTS::class.java).putExtra("Text", result)
             startActivity(intent)
-
-            Log.i(TAG, "Calling translation activity: $result")
         }
 
         findViewById<Button>(R.id.back_button).setOnClickListener {
@@ -95,8 +90,6 @@ class OCRConfirmation : AppCompatActivity() {
 
         // pull "image" from process that started the activity to call OCR
         val intentUri = intent.extras?.getString("imglocation")!!
-//        val resourceId = R.drawable.stc_sign
-//        val intentUri = "android.resource://${packageName}/${resourceId}"
         imageUri = Uri.parse(intentUri)
 
         val image: InputImage
