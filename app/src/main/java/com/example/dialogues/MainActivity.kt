@@ -1,23 +1,13 @@
 package com.example.dialogues
 
 import android.Manifest
-
-import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.nfc.Tag
-import android.os.Build
 import android.os.Bundle
-import android.os.StrictMode
-import android.os.StrictMode.VmPolicy
-import android.provider.MediaStore
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import android.util.Log
-import android.widget.Button
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCapture.OutputFileResults
@@ -25,16 +15,13 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import com.google.android.material.snackbar.Snackbar
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.example.dialogues.databinding.ActivityMainBinding
-import com.google.mlkit.vision.common.InputImage
 import java.io.File
-import java.io.IOException
-import java.net.URI
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 
 private val PreviewView.surfaceProvider: Preview.SurfaceProvider?
     get() {
@@ -175,7 +162,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_translation_screen)
+        setContentView(R.layout.activity_main)
+
+        val intent = Intent(this, TranslationScreen::class.java)
+        startActivity(intent)
+
 
         /*
         binding = ActivityMainBinding.inflate(layoutInflater)

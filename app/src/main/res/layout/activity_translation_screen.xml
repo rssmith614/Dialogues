@@ -21,8 +21,8 @@
         android:id="@+id/ts_spinner"
         android:layout_width="183dp"
         android:layout_height="48dp"
-        android:contentDescription="choice:"
-        android:background="#00A3FF"
+        android:elevation="2dp"
+        android:background="@color/translucent_blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.149"
@@ -34,8 +34,8 @@
         android:id="@+id/ts_spinner2"
         android:layout_width="183dp"
         android:layout_height="48dp"
-        android:contentDescription="choice:"
-        android:background="#00A3FF"
+        android:elevation="2dp"
+        android:background="@color/translucent_blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.149"
@@ -69,42 +69,53 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.769" />
 
-    <ImageButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/ts_button"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="#00A3FF"
-        android:src = "@drawable/sound"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.905"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="320dp"
+        android:layout_marginTop="288dp"
+        android:background="@drawable/rect_button"
+        android:drawableStart="@drawable/sound"
+        android:elevation="2dp"
+        android:gravity="center"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.443" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
+
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/ts_button2"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="#00A3FF"
-        android:src = "@drawable/sound"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.905"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="320dp"
+        android:layout_marginTop="620dp"
+        android:background="@drawable/rect_button"
+        android:drawableStart="@drawable/sound"
+        android:elevation="2dp"
+        android:gravity="center"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.931" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
-        android:id="@+id/ts_settings"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="#00A3FF"
-        android:src = "@drawable/settings"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.916"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/settings_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="324dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/rect_button"
+        android:contentDescription='@string/back'
+        android:drawableStart="@drawable/settings"
+        android:elevation="2dp"
+        android:gravity="center"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023" />
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
