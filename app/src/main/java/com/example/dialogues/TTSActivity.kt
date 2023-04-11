@@ -99,7 +99,7 @@ class TTSActivity : AppCompatActivity(), TextToSpeech.OnInitListener{
                         tts.setVoice(voice1)
 
                     }
-                    "Female 4 (ES)" -> { //SPANISH MAN
+                    "Female 4 (ES)" -> { //SPANISH MANtext
                         val locSpanish = Locale("spa","MEX")
                         val voice1 = Voice("es-es-x-eee-local", locSpanish, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)
                         tts.setVoice(voice1)

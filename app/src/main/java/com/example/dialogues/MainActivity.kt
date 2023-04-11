@@ -17,6 +17,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.Switch
 import android.widget.Toast
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -191,7 +193,12 @@ class MainActivity : AppCompatActivity() {
         outputDirectory = getOutputDirectory()
         cameraExecutor = Executors.newSingleThreadExecutor()
 
-        var camera_Click = findViewById<Button>(R.id.camera_capture_button)
+        var camera_Click = findViewById<ImageView>(R.id.camera_capture_button)
+
+        var settings_cog = findViewById<ImageView>(R.id.camera_settings_cog)
+        var switch1 = findViewById<Switch>(R.id.switch1)
+        var switch2 = findViewById<Switch>(R.id.switch2)
+        //var switch3 = findViewById<Switch>(R.id.switch3)
 
         camera_Click.setOnClickListener {
             var intent = Intent(this, ImageScreen::class.java)
