@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Dialogues</string>
     <string name="title_activity_ocrconfirmation">OCRConfirmation</string>
+    <string name="confirm">Confirm</string>
+    <string name="back">Back</string>
+    <string name="settings">Settings</string>
 </resources>
