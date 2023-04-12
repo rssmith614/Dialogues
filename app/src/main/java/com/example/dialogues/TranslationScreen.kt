@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
+import android.speech.tts.Voice
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -12,6 +13,7 @@ import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
+import java.util.*
 
 
 class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListener, TextToSpeech.OnInitListener  {
@@ -22,20 +24,23 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
     private var sourceLanguage = ""
     private var targetLanguage = ""
     private lateinit var inputString: String
+    private lateinit var sourceText :TextView
     private lateinit var targetText :TextView
     private lateinit var sourceSpinner :Spinner
     private lateinit var targetSpinner :Spinner
-    private  lateinit var tts :TextToSpeech
+    private  lateinit var ttsSource :TextToSpeech
+    private  lateinit var ttsTarget :TextToSpeech
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_translation_screen)
 
-        tts = TextToSpeech(this, this, "com.google.android.tts")
+        ttsSource = TextToSpeech(this, this, "com.google.android.tts")
+        ttsTarget = TextToSpeech(this, this, "com.google.android.tts")
 
         inputString = intent.extras?.getString("Text", "")!!
-//        inputString = "Hello World"
-        val sourceText = findViewById<TextView>(R.id.ts_textView)
+        //inputString = "Hello World"
+        sourceText = findViewById<TextView>(R.id.ts_textView)
         sourceText.text = inputString
 
         targetText = findViewById<TextView>(R.id.ts_textView2)
@@ -60,7 +65,7 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
 
         //HARD CODED VALUE FOR FLASH TALK PLEASE UPDATE
         setLanguages(sourceSpinner, targetSpinner)
-        translateString(tts, inputString)
+        translateString(inputString)
 
 
 
@@ -68,7 +73,7 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
 
         button.setOnClickListener{
             if (inputString != null) {
-                speakString(tts, inputString)
+                speakString(ttsSource, inputString)
             }
         }
 
@@ -76,7 +81,7 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
 
         button2.setOnClickListener{
             if (outputString != null) {
-                speakString(tts, outputString)
+                speakString(ttsTarget, outputString)
             }
         }
 
@@ -109,10 +114,27 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
 
     fun setLanguages(source: Spinner, target: Spinner){
         when(source.selectedItem.toString()){
-            "English" -> sourceLanguage = "en"
-            "Spanish" -> sourceLanguage = "es"
-            "French" -> sourceLanguage = "fr"
-            "German" -> sourceLanguage = "de"
+            "English" -> {
+                sourceLanguage = "en"
+                val voice = Voice("en-us-x-tpf-local", Locale.US, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)
+                ttsSource.setVoice(voice)
+            }
+            "Spanish" -> {
+                sourceLanguage = "es"
+                val locSpanish = Locale("spa","MEX")
+                val voice = Voice("es-es-x-eee-local", locSpanish, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)
+                ttsSource.setVoice(voice)
+            }
+            "French" -> {
+                targetLanguage = "fr"
+                val voice = Voice("fr-fr-x-vlf-local", Locale.FRANCE, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)
+                ttsSource.setVoice(voice)
+            }
+            "German" -> {
+                targetLanguage = "de"
+                val voice = Voice("de-de-x-nfh-local", Locale.GERMANY, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)
+                ttsSource.setVoice(voice)
+            }
             "Hindi" -> sourceLanguage = "hi"
             "Chinese" -> sourceLanguage = "zh"
             "Japanese" -> sourceLanguage = "ja"
@@ -120,21 +142,39 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
         }
 
         when(target.selectedItem.toString()){
-            "English" -> targetLanguage = "en"
-            "Spanish" -> targetLanguage = "es"
-            "French" -> targetLanguage = "fr"
-            "German" -> targetLanguage = "de"
+            "English" -> {
+                targetLanguage = "en"
+                val voice = Voice("en-us-x-tpf-local", Locale.US, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)
+                ttsTarget.setVoice(voice)
+            }
+            "Spanish" -> {
+                targetLanguage = "es"
+                val locSpanish = Locale("spa","MEX")
+                val voice = Voice("es-es-x-eee-local", locSpanish, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)
+                ttsTarget.setVoice(voice)
+            }
+
+            "French" -> {
+                targetLanguage = "fr"
+                val voice = Voice("fr-fr-x-vlf-local", Locale.FRANCE, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)
+                ttsTarget.setVoice(voice)
+            }
+            "German" ->{
+                targetLanguage = "de"
+                val voice = Voice("de-de-x-nfh-local", Locale.GERMANY, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)
+                ttsTarget.setVoice(voice)
+            }
             "Hindi" -> targetLanguage = "hi"
             "Chinese" -> targetLanguage = "zh"
             "Japanese" -> targetLanguage = "ja"
             "Arabic" -> targetLanguage = "ar"
         }
 
-        translateString(tts, inputString)
+        translateString(inputString)
 
     }
 
-    fun translateString(tts: TextToSpeech, input: String){
+    fun translateString(input: String){
 
         var options = TranslatorOptions.Builder()
             .setSourceLanguage(TranslateLanguage.fromLanguageTag(sourceLanguage).toString())
