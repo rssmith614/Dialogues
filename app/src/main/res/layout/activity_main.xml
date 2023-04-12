@@ -6,34 +6,100 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
+    <!--    <Button-->
+<!--        android:id="@+id/camera_capture_button"-->
+<!--        android:layout_width="100dp"-->
+<!--        android:layout_height="100dp"-->
+<!--        android:layout_marginBottom="50dp"-->
+<!--        android:backgroundTint="#00A3FF"-->
+<!--        android:elevation="2dp"-->
+<!--        android:scaleType="fitCenter"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintRight_toRightOf="parent" />-->
+
+
+<!--    <ImageView-->
+<!--        android:id="@+id/camera_settings_cog2"-->
+<!--        android:layout_width="58dp"-->
+<!--        android:layout_height="55dp"-->
+
+<!--        android:src="@drawable/baseline_settings_24"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        tools:ignore="MissingConstraints" />-->
+
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/camera_capture_button"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="132dp"
+        android:layout_height="132dp"
+        android:layout_gravity="center"
         android:layout_marginBottom="50dp"
+        android:background="@drawable/ellipse"
+        android:drawableStart="@drawable/camera_icon"
+        android:contentDescription="@string/camera_capture"
         android:elevation="2dp"
-        android:scaleType="fitCenter"
+        android:gravity="center"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/settings_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/rect_button"
+        android:contentDescription="@string/settings"
+        android:drawableStart="@drawable/settings"
+        android:elevation="2dp"
+        android:gravity="center"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+<!--    <Switch-->
+<!--        android:id="@+id/switch1"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Switch" />-->
+
+<!--    <Switch-->
+<!--        android:id="@+id/switch2"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Switch" />-->
+
+<!--    <Switch-->
+<!--        android:id="@+id/switch1"-->
+<!--        android:layout_width="58dp"-->
+<!--        android:layout_height="67dp"-->
+<!--        android:elevation="2dp"-->
+<!--        android:text="Switch1"-->
+<!--        android:checked="false"-->
+<!--        android:scaleType="fitCenter"-->
+<!--        tools:ignore="MissingConstraints" />-->
+
+<!--    <Switch-->
+<!--        android:id="@+id/switch2"-->
+<!--        android:layout_width="58dp"-->
+<!--        android:layout_height="67dp"-->
+<!--        android:layout_marginStart="100dp"-->
+<!--        android:elevation="2dp"-->
+<!--        android:scaleType="fitCenter"-->
+<!--        android:text="Switch2"-->
+<!--        android:checked="false"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        tools:ignore="MissingConstraints" />-->
 
     <androidx.camera.view.PreviewView
         android:id="@+id/preview_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-    <ImageButton
-        android:id="@+id/settingbutton"
-        android:layout_width="50dp"
-        android:layout_height="48dp"
-        android:background="@drawable/rect_button"
-        android:contentDescription="@string/app_name"
-        android:hint="settings"
-        android:src="@drawable/settings"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.953"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.025" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,9 +10,11 @@ import android.os.Vibrator
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.AppCompatButton
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCapture.OutputFileResults
@@ -186,7 +188,9 @@ class MainActivity : AppCompatActivity() {
         outputDirectory = getOutputDirectory()
         cameraExecutor = Executors.newSingleThreadExecutor()
 
-
+//        var switch1 = findViewById<Switch>(R.id.switch1)
+//        var switch2 = findViewById<Switch>(R.id.switch2)
+        //var switch3 = findViewById<Switch>(R.id.switch3)
 
         val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         fun vibrateTime() {
@@ -197,11 +201,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
         var camera_Click = findViewById<Button>(R.id.camera_capture_button)
-        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-            camera_Click.setBackgroundColor(resources.getColor(R.color.dark_mode_color))
-        } else {
-            camera_Click.setBackgroundColor(resources.getColor(R.color.notwhite))
-        }
+//        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+//            camera_Click.setBackgroundColor(resources.getColor(R.color.dark_mode_color))
+//        } else {
+//            camera_Click.setBackgroundColor(resources.getColor(R.color.notwhite))
+//        }
         camera_Click.setOnClickListener {
             var intent = Intent(this, ImageScreen::class.java)
             takePhoto()
@@ -230,7 +234,7 @@ class MainActivity : AppCompatActivity() {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
 
-        val settingsbind = findViewById<ImageButton>(R.id.settingbutton)
+        val settingsbind = findViewById<Button>(R.id.settings_button)
 
         settingsbind.setOnClickListener {
             val intent2 = Intent(this, Settings::class.java)
