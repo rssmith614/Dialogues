@@ -113,8 +113,9 @@ class Settings : AppCompatActivity() {
                 onBackPressed()
 
         }
+        val ilOptions = resources.getStringArray(R.array.LanguageOptions)
+        //val ilOptions = arrayOf("English", "Spanish", "French", "German", "Portuguese", "Italian", "Polish", "Romanian")
 
-        val ilOptions = arrayOf("English", "Spanish", "French", "German", "Portuguese", "Italian", "Polish", "Romanian")
         val inputAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, ilOptions)
         ilSpinner.adapter = inputAdapter
         ilPreferences = getSharedPreferences("ilPreferences", MODE_PRIVATE)
@@ -133,8 +134,8 @@ class Settings : AppCompatActivity() {
 
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
-
-        val olOptions =  arrayOf("English", "Spanish", "French", "German", "Portuguese", "Italian", "Polish", "Romanian", "Japanese", "Mandarin", "Russian" )
+        val olOptions = resources.getStringArray(R.array.LanguageOptions)
+        //val olOptions =  arrayOf("English", "Spanish", "French", "German", "Portuguese", "Italian", "Polish", "Romanian", "Japanese", "Mandarin", "Russian" )
         val outputAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, olOptions)
         //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         olSpinner.adapter = outputAdapter
