@@ -13,7 +13,7 @@ import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
-import java.util.*
+import java.util.Locale
 
 
 class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListener, TextToSpeech.OnInitListener  {
@@ -63,9 +63,22 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
             targetSpinner.adapter = adapter
         }
 
-        //HARD CODED VALUE FOR FLASH TALK PLEASE UPDATE
+
+        val spinnerArray = resources.getStringArray(R.array.LanguageOptions)
+
+        var sharedPreferences = getSharedPreferences("ilPreferences", MODE_PRIVATE)
+        var selectedPreference = sharedPreferences.getString("Selectedil", "").toString()
+        sourceSpinner.setSelection(spinnerArray.indexOf(selectedPreference))
+
+
+        sharedPreferences = getSharedPreferences("olPreferences", MODE_PRIVATE)
+        selectedPreference = sharedPreferences.getString("Selectedol", "").toString()
+        targetSpinner.setSelection(spinnerArray.indexOf(selectedPreference))
+
+
         setLanguages(sourceSpinner, targetSpinner)
         translateString(inputString)
+
 
 
 
@@ -73,6 +86,7 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
 
         button.setOnClickListener{
             if (inputString != null) {
+                setLanguages(sourceSpinner, targetSpinner)
                 speakString(ttsSource, inputString)
             }
         }
@@ -81,6 +95,7 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
 
         button2.setOnClickListener{
             if (outputString != null) {
+                setLanguages(sourceSpinner, targetSpinner)
                 speakString(ttsTarget, outputString)
             }
         }
@@ -96,9 +111,44 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        val spinnerArray = resources.getStringArray(R.array.LanguageOptions)
+
+        var sharedPreferences = getSharedPreferences("ilPreferences", MODE_PRIVATE)
+        var selectedPreference = sharedPreferences.getString("Selectedil", "").toString()
+        sourceSpinner.setSelection(spinnerArray.indexOf(selectedPreference))
+
+
+        sharedPreferences = getSharedPreferences("olPreferences", MODE_PRIVATE)
+        selectedPreference = sharedPreferences.getString("Selectedol", "").toString()
+        targetSpinner.setSelection(spinnerArray.indexOf(selectedPreference))
+
+
+        setLanguages(sourceSpinner, targetSpinner)
+        translateString(inputString)
+
+    }
+
     override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
         val item = parent.getItemAtPosition(position).toString()
         Toast.makeText(parent.context, item, Toast.LENGTH_LONG).show()
+
+
+
+        val sourceChoice = sourceSpinner.selectedItemPosition
+        var sharedPreferences = getSharedPreferences("ilPreferences", MODE_PRIVATE)
+        var preferenceEditor = sharedPreferences.edit()
+        preferenceEditor.putString("Selectedil", sourceSpinner.selectedItem.toString())
+        preferenceEditor.apply()
+
+        val targetChoice = targetSpinner.selectedItemPosition
+        sharedPreferences = getSharedPreferences("olPreferences", MODE_PRIVATE)
+        preferenceEditor = sharedPreferences.edit()
+        preferenceEditor.putString("Selectedol",  targetSpinner.selectedItem.toString())
+        preferenceEditor.apply()
+
+
 
         setLanguages(sourceSpinner, targetSpinner)
     }

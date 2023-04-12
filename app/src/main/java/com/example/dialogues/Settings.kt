@@ -143,6 +143,7 @@ class Settings : AppCompatActivity() {
         selectedol = olPreferences.getString("Selectedol", "").toString()
         olSpinner.setSelection(olOptions.indexOf(selectedol))
 
+
         olSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 selectedol = parent.getItemAtPosition(position).toString()

@@ -218,6 +218,7 @@ class MainActivity : AppCompatActivity() {
         val olPreferences = getSharedPreferences("olPreferences", MODE_PRIVATE)
         val selectedol = olPreferences.getString("Selectedol","").toString()
 
+
         val sharedPreferences = getSharedPreferences("VoicePreferences", MODE_PRIVATE)
         val selectedvoice = sharedPreferences.getString("SelectedVoice", "").toString()
 

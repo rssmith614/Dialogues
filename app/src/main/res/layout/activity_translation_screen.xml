@@ -45,27 +45,29 @@
 
     <TextView
         android:id="@+id/ts_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="330dp"
+        android:layout_height="244dp"
         android:text="Questions? Ask me!"
         android:textSize="36sp"
+        android:gravity = "center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.252" />
+        app:layout_constraintVertical_bias="0.2" />
 
     <TextView
         android:id="@+id/ts_textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="330dp"
+        android:layout_height="244dp"
         android:text="Fragen? Frag mich!"
         android:textSize="36sp"
+        android:gravity = "center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.75" />
+        app:layout_constraintVertical_bias="0.9" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/ts_button"
