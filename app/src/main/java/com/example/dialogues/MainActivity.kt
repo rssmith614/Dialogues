@@ -8,10 +8,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Vibrator
 import android.util.Log
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.Toast
+import android.view.View
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.AppCompatButton
@@ -93,6 +91,8 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun startCamera() {
+        findViewById<RelativeLayout>(R.id.loadingPanel).visibility = View.GONE
+
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
         cameraProviderFuture.addListener({
@@ -128,6 +128,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun takePhoto() {
+
         // Get a stable reference of the modifiable image capture use case
         val imageCapture = imageCapture ?: return
 
@@ -151,6 +152,7 @@ class MainActivity : AppCompatActivity() {
                     var intent = Intent(this@MainActivity, OCRConfirmation::class.java)
                     intent.putExtra("imglocation", savedUri.toString())
                     startActivity(intent)
+                    findViewById<RelativeLayout>(R.id.loadingPanel).visibility = View.GONE
 
                     transportfunc(savedUri)
 
@@ -207,7 +209,8 @@ class MainActivity : AppCompatActivity() {
 //            camera_Click.setBackgroundColor(resources.getColor(R.color.notwhite))
 //        }
         camera_Click.setOnClickListener {
-            var intent = Intent(this, ImageScreen::class.java)
+//            var intent = Intent(this, ImageScreen::class.java)
+            findViewById<RelativeLayout>(R.id.loadingPanel).visibility = View.VISIBLE
             takePhoto()
             vibrateTime()
             //Log.d(TAG, " code 234: $URI")
