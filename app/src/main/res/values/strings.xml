@@ -1,4 +1,18 @@
 <resources>
     <string name="app_name">Dialogues</string>
     <string name="title_activity_ocrconfirmation">OCRConfirmation</string>
+    <string name="confirm">Confirm</string>
+    <string name="back">Back</string>
+    <string name="settings">Settings</string>
+    <string name="camera_capture">Camera Capture</string>
+    <string-array name="LanguageOptions">
+        <item>English</item>
+        <item>Spanish</item>
+        <item>French</item>
+        <item>German</item>
+        <item>Hindi</item>
+        <item>Chinese</item>
+        <item>Japanese</item>
+        <item>Arabic</item>
+    </string-array>
 </resources>

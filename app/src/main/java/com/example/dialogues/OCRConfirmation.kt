@@ -1,17 +1,23 @@
 package com.example.dialogues
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.graphics.*
-import android.media.ExifInterface
 import android.net.Uri
 import android.os.Bundle
 import android.os.StrictMode
+import android.os.Vibrator
 import android.util.Log
 import android.view.MotionEvent
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.RelativeLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.graphics.toColor
 import androidx.navigation.ui.AppBarConfiguration
 import com.example.dialogues.databinding.ActivityOcrconfirmationBinding
 import com.google.mlkit.vision.common.InputImage
@@ -22,6 +28,9 @@ class OCRConfirmation : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityOcrconfirmationBinding
+
+    private lateinit var imageUri: Uri
+    private lateinit var mutableBitmap: Bitmap
 
     private val boundingBoxes = mutableListOf<Rect>()
 
@@ -61,37 +70,68 @@ class OCRConfirmation : AppCompatActivity() {
 
             true
         }
-
+        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        fun vibrateTime() {
+            val hapticFeedbackPreferences = getSharedPreferences("hfPrefs", Context.MODE_PRIVATE)
+            val HapticFeedbackOn = hapticFeedbackPreferences.getBoolean("HapticFeedbackEnabled", false)
+            if (HapticFeedbackOn) {
+                vibrator.vibrate(50)
+            }
+        }
+//        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+//            findViewById<Button>(R.id.confirm).setBackgroundColor(resources.getColor(R.color.solid_blue))
+//        } else {
+//            findViewById<Button>(R.id.confirm).setBackgroundColor(resources.getColor(R.color.solid_blue))
+//        }
         // assign button to next activity and pass selected text to it
         findViewById<Button>(R.id.confirm).setOnClickListener {
             // take text only from boxes still selected
             var result = ""
             for ((i, line) in textBoxes.withIndex()) {
                 if (selectedStates[i]) {
-                    val cleanLine = line.replace('\n', ' ')
-                    result += "$cleanLine "
+                    result += "$line "
                 }
             }
-            // call Translation activity
-            val intent = Intent(this, TranslationTTS::class.java).putExtra("Text", result)
-            startActivity(intent)
 
-            Log.i(TAG, "Calling translation activity: $result")
+            // call Translation activity
+            val intent = Intent(this, TranslationScreen::class.java).putExtra("Text", result)
+            startActivity(intent)
+            vibrateTime()
+        }
+
+        findViewById<Button>(R.id.back_button).setOnClickListener {
+            onBackPressed()
+        }
+
+        findViewById<Button>(R.id.settings_button).setOnClickListener {
+            val intent = Intent(this, Settings::class.java)
+            startActivity(intent)
         }
 
         // pull "image" from process that started the activity to call OCR
-        val intentUri = intent.extras?.getString("imglocation")
-        val uri = Uri.parse(intentUri)
+        val intentUri = intent.extras?.getString("imglocation")!!
+        imageUri = Uri.parse(intentUri)
 
         val image: InputImage
 
         try {
-            image = InputImage.fromFilePath(this, uri)
+            image = InputImage.fromFilePath(this, imageUri)
             // call the text recognition routine
             TextRecognizer(::textFound).recognizeImageText(image, 0, ::resultText)
         } catch (e: IOException) {
             e.printStackTrace()
         }
+
+        // prevent image scaling so boxes are drawn on same size image that was sent to OCR
+        val options = BitmapFactory.Options()
+        options.inScaled = false
+
+        val inStream = this.contentResolver.openInputStream(imageUri)
+        val bitmap = BitmapFactory.decodeStream(inStream)
+        val rotatedBitmap = bitmap.rotate(90f)
+
+        // copy the image so we can draw on it
+        mutableBitmap = rotatedBitmap.copy(Bitmap.Config.ARGB_8888, true)
     }
 
     /* OCR CALLBACK FUNCTIONS */
@@ -102,6 +142,13 @@ class OCRConfirmation : AppCompatActivity() {
 
             val boundingBox = block.boundingBox
             if (boundingBox != null) {
+                // boxes must be at least 1% as large as the image
+                // otherwise they're too hard to tap on
+                if ((boundingBox.width() * boundingBox.height()).toDouble()/(mutableBitmap.width * mutableBitmap.height) < 0.01){
+                    // ignore the puny boxes
+                    continue
+                }
+
                 textBoxes.add(block.text)
                 boundingBoxes.add(boundingBox)
                 // boxes are selected by default
@@ -113,11 +160,8 @@ class OCRConfirmation : AppCompatActivity() {
 
     // Process success state of text detection
     private fun resultText(b: Boolean) {
-        if (b) {
-            Log.e(TAG, "No text found")
-        } else {
-            Log.i(TAG, "Text found")
-        }
+        // hide loading icon, since image has been loaded and OCR call has finished
+        findViewById<RelativeLayout>(R.id.loadingPanel).visibility = View.GONE
     }
 
     private fun Bitmap.rotate(degrees: Float): Bitmap {
@@ -126,30 +170,6 @@ class OCRConfirmation : AppCompatActivity() {
     }
 
     private fun drawBoxes() {
-        // pull "image" from process that started the activity use it to draw boxes
-        val intentUri = intent.extras?.getString("imglocation")
-        val uri = Uri.parse(intentUri)
-
-        // prevent image scaling so boxes are drawn on same size image that was sent to OCR
-        val options = BitmapFactory.Options()
-        options.inScaled = false
-
-        val inStream = this.contentResolver.openInputStream(uri)
-//        val exif = ExifInterface(inStream!!)
-//        val orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
-        val bitmap = BitmapFactory.decodeStream(inStream)
-//        val rotatedBitmap = when (orientation) {
-//            ExifInterface.ORIENTATION_ROTATE_90 -> bitmap.rotate(90f)
-//            ExifInterface.ORIENTATION_ROTATE_180 -> bitmap.rotate(180f)
-//            ExifInterface.ORIENTATION_ROTATE_270 -> bitmap.rotate(270f)
-//            else -> bitmap
-//        }
-        val rotatedBitmap = bitmap.rotate(90f)
-
-
-        // copy the image so we can draw on it
-        val mutableBitmap = rotatedBitmap.copy(Bitmap.Config.ARGB_8888, true)
-
         val canvas = Canvas(mutableBitmap)
 
         val selectedPaint = Paint()
@@ -171,13 +191,11 @@ class OCRConfirmation : AppCompatActivity() {
         }
 
         // we need the size ratio between the original image and the bitmap for clicking boxes
-        viewToBitmapHeightScaleFactor = rotatedBitmap.height.toDouble() / binding.imageView.height.toDouble()
-        viewToBitmapWidthScaleFactor = rotatedBitmap.width.toDouble() / binding.imageView.width.toDouble()
+        viewToBitmapHeightScaleFactor = mutableBitmap.height.toDouble() / binding.imageView.height.toDouble()
+        viewToBitmapWidthScaleFactor = mutableBitmap.width.toDouble() / binding.imageView.width.toDouble()
 
         // put the new image on screen
         binding.imageView.setImageBitmap(mutableBitmap)
         binding.imageView.scaleType = ImageView.ScaleType.CENTER_CROP
-
-        inStream?.close()
     }
 }
