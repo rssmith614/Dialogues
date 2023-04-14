@@ -1,8 +1,13 @@
 package com.example.dialogues
 
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
+import android.media.AudioManager
 import android.os.Bundle
+import android.os.Vibrator
+import android.preference.PreferenceManager
 import android.speech.tts.TextToSpeech
 import android.speech.tts.Voice
 import android.util.Log
@@ -30,6 +35,12 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
     private lateinit var targetSpinner :Spinner
     private  lateinit var ttsSource :TextToSpeech
     private  lateinit var ttsTarget :TextToSpeech
+    private lateinit var talkspeedPrefs: SharedPreferences
+    private lateinit var pitchPrefs: SharedPreferences
+    private var pitchvoice: Float = 0.0f
+    private var talkspeed: Float = 0.0f
+    private val barStarter = 50
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,30 +84,46 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
 
         sharedPreferences = getSharedPreferences("olPreferences", MODE_PRIVATE)
         selectedPreference = sharedPreferences.getString("Selectedol", "").toString()
-        targetSpinner.setSelection(spinnerArray.indexOf(selectedPreference))
-
-
-        setLanguages(sourceSpinner, targetSpinner)
-        translateString(inputString)
+        targetSpinner.setSelection(spinnerArray.indexOf(selectedPreference)
+    )
 
 
 
+        val hapticFeedbackPreferences = getSharedPreferences("hfPrefs", Context.MODE_PRIVATE)
+        val HapticFeedbackOn = hapticFeedbackPreferences.getBoolean("HapticFeedbackEnabled", false)
+        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        fun vibrateTime() {
+            if (HapticFeedbackOn) {
+                vibrator.vibrate(50)
+            }
+        }
 
         val button = findViewById<Button>(R.id.ts_button)
 
         button.setOnClickListener{
-            if (inputString != null) {
-                setLanguages(sourceSpinner, targetSpinner)
-                speakString(ttsSource, inputString)
+            vibrateTime()
+            if (ttsSource.isSpeaking) {
+                ttsSource.stop()
+            } else {
+                if (inputString != null) {
+                    setLanguages(sourceSpinner, targetSpinner)
+                    speakString(ttsSource, inputString)
+                }
             }
         }
 
         val button2 = findViewById<Button>(R.id.ts_button2)
 
         button2.setOnClickListener{
-            if (outputString != null) {
-                setLanguages(sourceSpinner, targetSpinner)
-                speakString(ttsTarget, outputString)
+            vibrateTime()
+            if (ttsTarget.isSpeaking) {
+
+                ttsTarget.stop()
+            } else {
+                if (outputString != null) {
+                    setLanguages(sourceSpinner, targetSpinner)
+                    speakString(ttsTarget, outputString)
+                }
             }
         }
 
@@ -141,11 +168,13 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
         var preferenceEditor = sharedPreferences.edit()
         preferenceEditor.putString("Selectedil", sourceSpinner.selectedItem.toString())
         preferenceEditor.apply()
+        //vibrateTime()
 
         val targetChoice = targetSpinner.selectedItemPosition
         sharedPreferences = getSharedPreferences("olPreferences", MODE_PRIVATE)
         preferenceEditor = sharedPreferences.edit()
         preferenceEditor.putString("Selectedol",  targetSpinner.selectedItem.toString())
+        //vibrateTime()
         preferenceEditor.apply()
 
 
@@ -246,6 +275,23 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
 
 
     }
+    private fun getTalkSpeed(): Float {
+        talkspeedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
+        talkspeed = talkspeedPrefs.getInt("speed", barStarter).toFloat() / 50.0f
+        if (talkspeed == 0f) {
+            return 0.10f
+        }
+        return talkspeed
+    }
+
+    private fun getPitchSpeed(): Float {
+        pitchPrefs = PreferenceManager.getDefaultSharedPreferences(this)
+        pitchvoice = pitchPrefs.getInt("pitch", barStarter).toFloat() / 50.0f
+        if (pitchvoice == 0f) {
+            return 0.10f
+        }
+        return pitchvoice
+    }
 
     fun onModelSuccess (translator: com.google.mlkit.nl.translate.Translator){
 
@@ -263,8 +309,34 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
 
 
     fun speakString(tts: TextToSpeech, input: String){
-
-        tts.speak(input, TextToSpeech.QUEUE_ADD, null)
+        val pauseSpeakPreferences = getSharedPreferences("pauseSpeakPrefs", MODE_PRIVATE)
+        val pauseSpeakPrefSwitch = pauseSpeakPreferences.getBoolean("switched", false)
+        val talkspeed = getTalkSpeed()
+        val pitchvoice = getPitchSpeed()
+        tts.setSpeechRate(talkspeed)
+        tts.setPitch(pitchvoice)
+        if(pauseSpeakPrefSwitch == true){
+            val alttext = input.split(" ")
+            var i = 0
+            while (i < alttext.size) {
+                tts.speak(alttext[i], TextToSpeech.QUEUE_ADD, null) //tts speaks
+                i++
+            }
+        }
+        else {
+            tts.speak(input, TextToSpeech.QUEUE_ADD, null)
+        }
 
     }
+    override fun onPause() {
+        super.onPause()
+        if (ttsSource.isSpeaking) {
+            ttsSource.stop()
+        }
+        if (ttsTarget.isSpeaking) {
+            ttsTarget.stop()
+        }
+    }
+
+
 }
