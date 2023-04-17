@@ -5,14 +5,36 @@
     <string name="back">Back</string>
     <string name="settings">Settings</string>
     <string name="camera_capture">Camera Capture</string>
+    <string-array name="LanguageOptions2">
+        <item>English</item>
+        <item>Spanish</item>
+        <item>French</item>
+        <item>German</item>
+        <item>Portuguese</item>
+        <item>Hindi</item>
+        <item>Chinese</item>
+        <item>Japanese</item>
+        <item>Arabic</item>
+        <item>Russian</item>
+        <item>Italian</item>
+        <item>Polish</item>
+        <item>Romanian</item>
+        <item>Turkish</item>
+        <item>Swedish</item>
+        <item>Korean</item>
+        <item>Bengali</item>
+    </string-array>
+
     <string-array name="LanguageOptions">
         <item>English</item>
         <item>Spanish</item>
         <item>French</item>
         <item>German</item>
-        <item>Hindi</item>
-        <item>Chinese</item>
-        <item>Japanese</item>
-        <item>Arabic</item>
+        <item>Portuguese</item>
+        <item>Italian</item>
+        <item>Polish</item>
+        <item>Romanian</item>
+        <item>Turkish</item>
+        <item>Swedish</item>
     </string-array>
 </resources>

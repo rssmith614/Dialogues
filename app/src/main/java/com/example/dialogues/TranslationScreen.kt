@@ -62,18 +62,21 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
         targetSpinner = findViewById<Spinner>(R.id.ts_spinner2)
         targetSpinner.onItemSelectedListener = this
 
-        ArrayAdapter.createFromResource(
-            this,
+        ArrayAdapter.createFromResource(this,
             R.array.LanguageOptions,
             android.R.layout.simple_spinner_item
         ).also { adapter ->
-            // Specify the layout to use when the list of choices appears
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            // Apply the adapter to the spinner
             sourceSpinner.adapter = adapter
-            targetSpinner.adapter = adapter
         }
 
+        ArrayAdapter.createFromResource(this,
+            R.array.LanguageOptions2,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            targetSpinner.adapter = adapter
+        }
 
         val spinnerArray = resources.getStringArray(R.array.LanguageOptions)
 
@@ -84,19 +87,13 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
 
         sharedPreferences = getSharedPreferences("olPreferences", MODE_PRIVATE)
         selectedPreference = sharedPreferences.getString("Selectedol", "").toString()
-        targetSpinner.setSelection(spinnerArray.indexOf(selectedPreference)
-    )
+        val targetSpinnerArray = resources.getStringArray(R.array.LanguageOptions2)
+        targetSpinner.setSelection(targetSpinnerArray.indexOf(selectedPreference))
 
 
 
-        val hapticFeedbackPreferences = getSharedPreferences("hfPrefs", Context.MODE_PRIVATE)
-        val HapticFeedbackOn = hapticFeedbackPreferences.getBoolean("HapticFeedbackEnabled", false)
-        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        fun vibrateTime() {
-            if (HapticFeedbackOn) {
-                vibrator.vibrate(50)
-            }
-        }
+
+
 
         val button = findViewById<Button>(R.id.ts_button)
 
@@ -138,43 +135,49 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
 
     }
 
+    private fun vibrateTime() {
+        val hapticFeedbackPreferences = getSharedPreferences("hfPrefs", Context.MODE_PRIVATE)
+        val HapticFeedbackOn = hapticFeedbackPreferences.getBoolean("HapticFeedbackEnabled", false)
+        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        if (HapticFeedbackOn) {
+            vibrator.vibrate(50)
+        }
+    }
+
     override fun onResume() {
         super.onResume()
+
         val spinnerArray = resources.getStringArray(R.array.LanguageOptions)
 
         var sharedPreferences = getSharedPreferences("ilPreferences", MODE_PRIVATE)
         var selectedPreference = sharedPreferences.getString("Selectedil", "").toString()
         sourceSpinner.setSelection(spinnerArray.indexOf(selectedPreference))
 
-
         sharedPreferences = getSharedPreferences("olPreferences", MODE_PRIVATE)
         selectedPreference = sharedPreferences.getString("Selectedol", "").toString()
-        targetSpinner.setSelection(spinnerArray.indexOf(selectedPreference))
-
+        val targetSpinnerArray = resources.getStringArray(R.array.LanguageOptions2)
+        targetSpinner.setSelection(targetSpinnerArray.indexOf(selectedPreference))
 
         setLanguages(sourceSpinner, targetSpinner)
         translateString(inputString)
-
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
         val item = parent.getItemAtPosition(position).toString()
         Toast.makeText(parent.context, item, Toast.LENGTH_LONG).show()
 
-
-
         val sourceChoice = sourceSpinner.selectedItemPosition
         var sharedPreferences = getSharedPreferences("ilPreferences", MODE_PRIVATE)
         var preferenceEditor = sharedPreferences.edit()
         preferenceEditor.putString("Selectedil", sourceSpinner.selectedItem.toString())
         preferenceEditor.apply()
-        //vibrateTime()
+        vibrateTime()
 
         val targetChoice = targetSpinner.selectedItemPosition
         sharedPreferences = getSharedPreferences("olPreferences", MODE_PRIVATE)
         preferenceEditor = sharedPreferences.edit()
-        preferenceEditor.putString("Selectedol",  targetSpinner.selectedItem.toString())
-        //vibrateTime()
+        preferenceEditor.putString("Selectedol", targetSpinner.selectedItem.toString())
+        vibrateTime()
         preferenceEditor.apply()
 
 
@@ -214,10 +217,12 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
                 val voice = Voice("de-de-x-nfh-local", Locale.GERMANY, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)
                 ttsSource.setVoice(voice)
             }
-            "Hindi" -> sourceLanguage = "hi"
-            "Chinese" -> sourceLanguage = "zh"
-            "Japanese" -> sourceLanguage = "ja"
-            "Arabic" -> sourceLanguage = "ar"
+            "Portuguese" -> targetLanguage = "pt"
+            "Italian" -> targetLanguage = "it"
+            "Polish" -> targetLanguage = "pl"
+            "Romanian" -> targetLanguage = "ro"
+            "Turkish" -> targetLanguage = "tr"
+            "Swedish" -> targetLanguage = "sv"
         }
 
         when(target.selectedItem.toString()){
@@ -243,10 +248,19 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
                 val voice = Voice("de-de-x-nfh-local", Locale.GERMANY, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)
                 ttsTarget.setVoice(voice)
             }
+            "Portuguese" -> targetLanguage = "pt"
             "Hindi" -> targetLanguage = "hi"
             "Chinese" -> targetLanguage = "zh"
             "Japanese" -> targetLanguage = "ja"
             "Arabic" -> targetLanguage = "ar"
+            "Russian" -> targetLanguage = "ru"
+            "Italian" -> targetLanguage = "it"
+            "Polish" -> targetLanguage = "pl"
+            "Romanian" -> targetLanguage = "ro"
+            "Turkish" -> targetLanguage = "tr"
+            "Swedish" -> targetLanguage = "sv"
+            "Korean" -> targetLanguage = "ko"
+            "Bengali" -> targetLanguage = "bn"
         }
 
         translateString(inputString)
