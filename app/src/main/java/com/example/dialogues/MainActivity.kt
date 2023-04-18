@@ -151,6 +151,7 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this@MainActivity, "$msg $savedUri", Toast.LENGTH_SHORT).show()
                     var intent = Intent(this@MainActivity, OCRConfirmation::class.java)
                     intent.putExtra("imglocation", savedUri.toString())
+                    intent.putExtra("Confirm", true)
                     startActivity(intent)
                     findViewById<RelativeLayout>(R.id.loadingPanel).visibility = View.GONE
 

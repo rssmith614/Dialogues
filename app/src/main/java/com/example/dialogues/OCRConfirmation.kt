@@ -114,10 +114,18 @@ class OCRConfirmation : AppCompatActivity() {
 
         val image: InputImage
 
+
+
         try {
             image = InputImage.fromFilePath(this, imageUri)
             // call the text recognition routine
-            TextRecognizer(::textFound).recognizeImageText(image, 0, ::resultText)
+            if (intent.extras?.getBoolean("Confirm")!!) {
+                TextRecognizer(::textFound).recognizeImageText(image, 0, ::resultText)
+            } else {
+                findViewById<Button>(R.id.confirm).visibility = View.GONE
+                findViewById<Button>(R.id.settings_button).visibility = View.GONE
+                TextRecognizer(::passResultText).recognizeImageText(image, 0, ::resultText)
+            }
         } catch (e: IOException) {
             e.printStackTrace()
         }
@@ -162,6 +170,18 @@ class OCRConfirmation : AppCompatActivity() {
     private fun resultText(b: Boolean) {
         // hide loading icon, since image has been loaded and OCR call has finished
         findViewById<RelativeLayout>(R.id.loadingPanel).visibility = View.GONE
+    }
+
+    private fun passResultText(text: Text) {
+        // take text only from boxes still selected
+        var result = ""
+        for (line in text.textBlocks) {
+            result += "${line.text} "
+        }
+
+        // call Translation activity
+        val intent = Intent(this, TranslationScreen::class.java).putExtra("Text", result)
+        startActivity(intent)
     }
 
     private fun Bitmap.rotate(degrees: Float): Bitmap {
