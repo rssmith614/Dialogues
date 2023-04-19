@@ -9,6 +9,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import android.os.Vibrator
+import androidx.core.content.ContextCompat
 
 class Settings : AppCompatActivity() {
 
@@ -18,10 +19,10 @@ class Settings : AppCompatActivity() {
     private lateinit var dropdown1: ImageButton
     private lateinit var dropdown2: ImageButton
     private lateinit var dropdown3: ImageButton
-    private  var selectedVoice: String = ""
+    //private  var selectedVoice: String = ""
     private var selectedil: String = ""
     private var selectedol: String = ""
-    private lateinit var sharedPreferences: SharedPreferences
+    //private lateinit var sharedPreferences: SharedPreferences
     private lateinit var talkspeedPrefs: SharedPreferences
     private lateinit var pitchPrefs: SharedPreferences
     private lateinit var ilPreferences: SharedPreferences
@@ -33,12 +34,12 @@ class Settings : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings_tts)
         val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        voiceSpinner = findViewById(R.id.spinner)
+        //voiceSpinner = findViewById(R.id.spinner)
         ilSpinner = findViewById(R.id.ilspinner)
         olSpinner = findViewById(R.id.olspinner)
         dropdown1 = findViewById(R.id.spinoptions)
         dropdown2 = findViewById(R.id.spinoptions2)
-        dropdown3 = findViewById(R.id.spinoptions3)
+        //dropdown3 = findViewById(R.id.spinoptions3)
         fun vibrateDevice() {
             if (HapticFeedbackOn == true) {
                 vibrator.vibrate(50)
@@ -77,11 +78,11 @@ class Settings : AppCompatActivity() {
 
         }
 
-        dropdown3.setOnClickListener{
-            voiceSpinner.performClick()
+        //dropdown3.setOnClickListener{
+           // voiceSpinner.performClick()
             //vibrateDevice()
 
-        }
+        //}
         val speedBar = findViewById<SeekBar>(R.id.speedbar)
         val pitchBar = findViewById<SeekBar>(R.id.pitchbar)
 
@@ -134,7 +135,7 @@ class Settings : AppCompatActivity() {
 
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
-        val olOptions = resources.getStringArray(R.array.LanguageOptions)
+        val olOptions = resources.getStringArray(R.array.LanguageOptions2)
         //val olOptions =  arrayOf("English", "Spanish", "French", "German", "Portuguese", "Italian", "Polish", "Romanian", "Japanese", "Mandarin", "Russian" )
         val outputAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, olOptions)
         //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -158,27 +159,7 @@ class Settings : AppCompatActivity() {
         }
 
 
-        //Voice Part of Code
-        val voiceOptions = arrayOf("Female 1 (UK)", "Female 2 (US)", "Female 3 (IN)", "Female 4 (ES)", "Male 1 (UK)", "Male 2 (US)", "Male 3 (IN)", "Male 4 (ES)")
-        val voiceAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, voiceOptions)
-        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        voiceSpinner.adapter = voiceAdapter
-        sharedPreferences = getSharedPreferences("VoicePreferences", MODE_PRIVATE)
 
-        selectedVoice = sharedPreferences.getString("SelectedVoice", "").toString()
-        voiceSpinner.setSelection(voiceOptions.indexOf(selectedVoice))
-
-        voiceSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                selectedVoice = parent.getItemAtPosition(position).toString()
-                val voiceeditor = sharedPreferences.edit()
-                voiceeditor.putString("SelectedVoice", selectedVoice)
-                voiceeditor.apply()
-                vibrateDevice()
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {}
-        }
 
         val switchButton = findViewById<Switch>(R.id.switcher)
         val pauseSpeakPreferences = getSharedPreferences("pauseSpeakPrefs", MODE_PRIVATE)

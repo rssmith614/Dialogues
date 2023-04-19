@@ -18,34 +18,95 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
+    <View
+        android:id = "@+id/view1"
+        android:layout_width = "match_parent"
+        android:layout_height = "1dp"
+        android:background = "@color/grey"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.11"
+        />
+    <View
+        android:id = "@+id/view2"
+        android:layout_width = "match_parent"
+        android:layout_height = "1dp"
+        android:background = "@color/grey"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.43"
+
+        />
+    <View
+        android:layout_width = "match_parent"
+        android:layout_height = "1dp"
+        android:background = "@color/grey"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.64"
+        android:id = "@+id/view3"
+        />
+    <View
+        android:layout_width = "match_parent"
+        android:layout_height = "1dp"
+        android:background = "@color/grey"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.76"
+        />
+    <View
+        android:layout_width = "match_parent"
+        android:layout_height = "1dp"
+        android:background = "@color/grey"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.88"
+        android:id = "@+id/view4"
+        />
+
     <SeekBar
         android:id="@+id/speedbar"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
+        android:layout_width="223dp"
+        android:layout_height="14dp"
         android:progress="50"
         android:progressTint="#00A3FF"
         android:thumbTint="#00A3FF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.753"
+        app:layout_constraintHorizontal_bias="0.037"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.653" />
+        app:layout_constraintVertical_bias="0.50" />
+
 
     <SeekBar
         android:id="@+id/pitchbar"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
+        android:layout_width="225dp"
+        android:layout_height="14dp"
         android:progress="50"
         android:progressTint="#00A3FF"
         android:thumbTint="#00A3FF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.753"
+        app:layout_constraintHorizontal_bias="0.032"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.711" />
-
+        app:layout_constraintVertical_bias="0.605" />
 
     <Switch
         android:id="@+id/switcher"
@@ -55,10 +116,10 @@
         android:fontFamily="@font/lexend"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.422"
+        app:layout_constraintHorizontal_bias="0.822"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.809"
+        app:layout_constraintVertical_bias="0.69"
         app:thumbTint="#FFFFFF"
         app:trackTint="#00A3FF" />
 
@@ -71,10 +132,10 @@
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.215"
+        app:layout_constraintHorizontal_bias="0.822"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.904"
+        app:layout_constraintVertical_bias="0.82"
         app:thumbTint="#FFFFFF"
         app:trackTint="#00A3FF" />
 
@@ -87,25 +148,12 @@
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.376"
+        app:layout_constraintHorizontal_bias="0.822"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_bias="0.94"
         app:thumbTint="#FFFFFF"
         app:trackTint="#00A3FF" />
-
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="163dp"
-        android:layout_height="49dp"
-        android:background="@drawable/rect_button"
-        android:contentDescription="choice:"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.532"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.551" />
 
 
 
@@ -140,39 +188,39 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/lexend"
-        android:text="Adjust Speed:"
+        android:text="Voice Speed:"
         android:textColor = "?android:textColorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.037"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.649"
+        app:layout_constraintVertical_bias="0.46"
         android:textSize ="20sp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/lexend"
-        android:text="Adjust Pitch:"
+        android:text="Voice Pitch:"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.036"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:textColor = "?android:textColorPrimary"
-        app:layout_constraintVertical_bias="0.708"
+        app:layout_constraintVertical_bias="0.56"
         android:textSize ="20sp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/lexend"
-        android:text="Select a source language:"
+        android:text="Source language:"
         android:textColor = "?android:textColorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.037"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.149"
@@ -183,29 +231,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/lexend"
-        android:text="Select a target language:"
+        android:text="Target language:"
         android:textColor = "?android:textColorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.037"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.302"
         android:textSize ="20sp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Select a TTS voice:"
-        android:fontFamily="@font/lexend"
-        android:textColor = "?android:textColorPrimary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.017"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.475"
-        android:textSize ="20sp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -218,7 +253,7 @@
         app:layout_constraintHorizontal_bias="0.047"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.798"
+        app:layout_constraintVertical_bias="0.68"
         android:textSize ="20sp"
         />
 
@@ -234,9 +269,49 @@
         app:layout_constraintHorizontal_bias="0.04"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.887"
+        app:layout_constraintVertical_bias="0.81"
         android:textSize ="20sp"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lexend"
+        android:text="Changes the appearance of the app to use \nlighter colors or darker colors."
+        android:textColor="?android:textColorPrimary"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.047"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.858" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lexend"
+        android:text="Adds vibrations to every button in the app."
+        android:textColor="?android:textColorPrimary"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.048"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.955" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lexend"
+        android:text=" The text-to-speech pronounces each individual word \n by briefly pausing between words in a sentence. "
+        android:textColor="?android:textColorPrimary"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.047"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.73" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -248,7 +323,7 @@
         app:layout_constraintHorizontal_bias="0.055"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.977"
+        app:layout_constraintVertical_bias="0.93"
         android:textSize ="20sp"/>
 
     <ImageButton
@@ -266,21 +341,7 @@
         app:layout_constraintVertical_bias="0.365"
         tools:ignore="TouchTargetSizeCheck" />
 
-    <ImageButton
-        android:id="@+id/spinoptions3"
-        android:layout_width="42dp"
-        android:layout_height="34dp"
-        android:background="@drawable/rect_button"
-        android:contentDescription="spinoptions3"
 
-        android:src="@drawable/baseline_arrow_drop_down_black_24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.685"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.55"
-        tools:ignore="TouchTargetSizeCheck" />
 
     <ImageButton
         android:id="@+id/backbutton"
