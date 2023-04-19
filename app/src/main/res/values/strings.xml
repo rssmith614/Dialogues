@@ -10,19 +10,6 @@
         <item>Spanish</item>
         <item>French</item>
         <item>German</item>
-        <item>Portuguese</item>
-        <item>Hindi</item>
-        <item>Chinese</item>
-        <item>Japanese</item>
-        <item>Arabic</item>
-        <item>Russian</item>
-        <item>Italian</item>
-        <item>Polish</item>
-        <item>Romanian</item>
-        <item>Turkish</item>
-        <item>Swedish</item>
-        <item>Korean</item>
-        <item>Bengali</item>
     </string-array>
 
     <string-array name="LanguageOptions">
@@ -30,11 +17,5 @@
         <item>Spanish</item>
         <item>French</item>
         <item>German</item>
-        <item>Portuguese</item>
-        <item>Italian</item>
-        <item>Polish</item>
-        <item>Romanian</item>
-        <item>Turkish</item>
-        <item>Swedish</item>
     </string-array>
 </resources>

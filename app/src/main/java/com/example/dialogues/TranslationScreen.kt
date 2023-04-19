@@ -10,6 +10,7 @@ import android.os.Vibrator
 import android.preference.PreferenceManager
 import android.speech.tts.TextToSpeech
 import android.speech.tts.Voice
+import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -18,7 +19,7 @@ import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
-import java.util.Locale
+import java.util.*
 
 
 class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListener, TextToSpeech.OnInitListener  {
@@ -53,8 +54,10 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
         //inputString = "Hello World"
         sourceText = findViewById<TextView>(R.id.ts_textView)
         sourceText.text = inputString
+        sourceText.movementMethod = ScrollingMovementMethod()
 
         targetText = findViewById<TextView>(R.id.ts_textView2)
+        targetText.movementMethod = ScrollingMovementMethod()
 
         sourceSpinner = findViewById<Spinner>(R.id.ts_spinner)
         sourceSpinner.onItemSelectedListener = this
