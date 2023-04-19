@@ -185,10 +185,6 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
                 val voice = Voice("de-de-x-nfh-local", Locale.GERMANY, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)
                 ttsSource.setVoice(voice)
             }
-            "Hindi" -> sourceLanguage = "hi"
-            "Chinese" -> sourceLanguage = "zh"
-            "Japanese" -> sourceLanguage = "ja"
-            "Arabic" -> sourceLanguage = "ar"
         }
 
         when(target.selectedItem.toString()){
@@ -214,10 +210,6 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
                 val voice = Voice("de-de-x-nfh-local", Locale.GERMANY, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)
                 ttsTarget.setVoice(voice)
             }
-            "Hindi" -> targetLanguage = "hi"
-            "Chinese" -> targetLanguage = "zh"
-            "Japanese" -> targetLanguage = "ja"
-            "Arabic" -> targetLanguage = "ar"
         }
 
         translateString(inputString)
@@ -236,13 +228,18 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
         var conditions = DownloadConditions.Builder()
             .requireWifi()
             .build()
-
+        findViewById<RelativeLayout>(R.id.loadingPanel).visibility = View.VISIBLE
         translator.downloadModelIfNeeded(conditions)
             .addOnSuccessListener {
                 onModelSuccess(translator)
 
             }
-            .addOnFailureListener { Log.d("MODEL", "Model download Failed") }
+            .addOnFailureListener {
+                Log.d("MODEL", "Model download Failed")
+                findViewById<RelativeLayout>(R.id.loadingPanel).visibility = View.GONE
+            }
+
+
 
 
     }
@@ -253,9 +250,13 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
             .addOnSuccessListener {
                     translatedText -> targetText.text  = translatedText
                 outputString = translatedText
+                findViewById<RelativeLayout>(R.id.loadingPanel).visibility = View.GONE
 
             }
-            .addOnFailureListener { Log.d("TRANSLATION", "Translate Failed") }
+            .addOnFailureListener {
+                findViewById<RelativeLayout>(R.id.loadingPanel).visibility = View.GONE
+                Log.d("TRANSLATION", "Translate Failed")
+            }
 
     }
 

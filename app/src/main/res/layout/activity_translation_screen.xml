@@ -7,6 +7,19 @@
     android:background="@drawable/layout_background"
     tools:context=".TranslationScreen">
 
+    <RelativeLayout
+        android:id="@+id/loadingPanel"
+        android:elevation="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center" >
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+    </RelativeLayout>
+
     <View
         android:layout_width="350dp"
         android:layout_height="2dp"
@@ -47,7 +60,7 @@
         android:id="@+id/ts_textView"
         android:layout_width="330dp"
         android:layout_height="244dp"
-        android:text="Questions? Ask me!"
+        android:text=""
         android:textSize="36sp"
         android:gravity = "center"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -60,7 +73,7 @@
         android:id="@+id/ts_textView2"
         android:layout_width="330dp"
         android:layout_height="244dp"
-        android:text="Fragen? Frag mich!"
+        android:text=""
         android:textSize="36sp"
         android:gravity = "center"
         app:layout_constraintBottom_toBottomOf="parent"

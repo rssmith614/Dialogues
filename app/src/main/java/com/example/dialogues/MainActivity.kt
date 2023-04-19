@@ -7,11 +7,10 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Vibrator
+import android.speech.tts.Voice
 import android.util.Log
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.Toast
+import android.view.View
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.AppCompatButton
@@ -25,6 +24,10 @@ import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.dialogues.databinding.ActivityMainBinding
+import com.google.mlkit.common.model.DownloadConditions
+import com.google.mlkit.nl.translate.TranslateLanguage
+import com.google.mlkit.nl.translate.Translation
+import com.google.mlkit.nl.translate.TranslatorOptions
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -217,7 +220,6 @@ class MainActivity : AppCompatActivity() {
         val selectedil = ilPreferences.getString("Selectedil","").toString()
         val olPreferences = getSharedPreferences("olPreferences", MODE_PRIVATE)
         val selectedol = olPreferences.getString("Selectedol","").toString()
-
 
         val sharedPreferences = getSharedPreferences("VoicePreferences", MODE_PRIVATE)
         val selectedvoice = sharedPreferences.getString("SelectedVoice", "").toString()
