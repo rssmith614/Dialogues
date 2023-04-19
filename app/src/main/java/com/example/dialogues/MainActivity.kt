@@ -172,6 +172,8 @@ class MainActivity : AppCompatActivity() {
 //        URI = link.toString()
     }
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -223,7 +225,6 @@ class MainActivity : AppCompatActivity() {
 
         val sharedPreferences = getSharedPreferences("VoicePreferences", MODE_PRIVATE)
         val selectedvoice = sharedPreferences.getString("SelectedVoice", "").toString()
-
 
         val pauseSpeakPreferences = getSharedPreferences("pauseSpeakPrefs", MODE_PRIVATE)
         val pauseSpeakPrefSwitch = pauseSpeakPreferences.getBoolean("switched", false)

@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.Translation
@@ -132,8 +133,6 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
         val item = parent.getItemAtPosition(position).toString()
-        Toast.makeText(parent.context, item, Toast.LENGTH_LONG).show()
-
 
 
         val sourceChoice = sourceSpinner.selectedItemPosition
@@ -228,7 +227,7 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
         var conditions = DownloadConditions.Builder()
             .requireWifi()
             .build()
-        findViewById<RelativeLayout>(R.id.loadingPanel).visibility = View.VISIBLE
+        findViewById<ConstraintLayout>(R.id.loadingPanel).visibility = View.VISIBLE
         translator.downloadModelIfNeeded(conditions)
             .addOnSuccessListener {
                 onModelSuccess(translator)
@@ -236,7 +235,7 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
             }
             .addOnFailureListener {
                 Log.d("MODEL", "Model download Failed")
-                findViewById<RelativeLayout>(R.id.loadingPanel).visibility = View.GONE
+                findViewById<ConstraintLayout>(R.id.loadingPanel).visibility = View.GONE
             }
 
 
@@ -250,11 +249,11 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
             .addOnSuccessListener {
                     translatedText -> targetText.text  = translatedText
                 outputString = translatedText
-                findViewById<RelativeLayout>(R.id.loadingPanel).visibility = View.GONE
+                findViewById<ConstraintLayout>(R.id.loadingPanel).visibility = View.GONE
 
             }
             .addOnFailureListener {
-                findViewById<RelativeLayout>(R.id.loadingPanel).visibility = View.GONE
+                findViewById<ConstraintLayout>(R.id.loadingPanel).visibility = View.GONE
                 Log.d("TRANSLATION", "Translate Failed")
             }
 
