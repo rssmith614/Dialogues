@@ -6,18 +6,13 @@ import android.content.Intent
 import android.graphics.*
 import android.net.Uri
 import android.os.Bundle
-import android.os.StrictMode
 import android.os.Vibrator
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.RelativeLayout
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.graphics.toColor
 import androidx.navigation.ui.AppBarConfiguration
 import com.example.dialogues.databinding.ActivityOcrconfirmationBinding
 import com.google.mlkit.vision.common.InputImage
@@ -140,6 +135,9 @@ class OCRConfirmation : AppCompatActivity() {
 
         // copy the image so we can draw on it
         mutableBitmap = rotatedBitmap.copy(Bitmap.Config.ARGB_8888, true)
+
+        binding.imageView.setImageBitmap(mutableBitmap)
+        binding.imageView.scaleType = ImageView.ScaleType.CENTER_CROP
     }
 
     /* OCR CALLBACK FUNCTIONS */
