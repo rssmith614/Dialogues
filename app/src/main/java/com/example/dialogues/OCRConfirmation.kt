@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.*
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.Vibrator
@@ -134,7 +135,7 @@ class OCRConfirmation : AppCompatActivity() {
         val rotatedBitmap = bitmap.rotate(90f)
 
         // copy the image so we can draw on it
-        mutableBitmap = rotatedBitmap.copy(Bitmap.Config.ARGB_8888, true)
+        mutableBitmap = rotatedBitmap.copy(Bitmap.Config.ARGB_8888, false)
 
         binding.imageView.setImageBitmap(mutableBitmap)
         binding.imageView.scaleType = ImageView.ScaleType.CENTER_CROP
@@ -188,23 +189,20 @@ class OCRConfirmation : AppCompatActivity() {
     }
 
     private fun drawBoxes() {
-        val canvas = Canvas(mutableBitmap)
+        val copiedBitmap = mutableBitmap.copy(Bitmap.Config.ARGB_8888, true)
+        val canvas = Canvas(copiedBitmap)
 
-        val selectedPaint = Paint()
-        selectedPaint.color = Color.GREEN
-        selectedPaint.style = Paint.Style.STROKE
-        selectedPaint.strokeWidth = 16f
+        val selected = resources.getDrawable(R.drawable.selected_text)
 
-        val unselectedPaint = Paint()
-        unselectedPaint.color = Color.RED
-        unselectedPaint.style = Paint.Style.STROKE
-        unselectedPaint.strokeWidth = 16f
+        val unselected = resources.getDrawable(R.drawable.unselected_text)
 
         for ((i, boundingBox) in boundingBoxes.withIndex()) {
             if (selectedStates[i]) {
-                canvas.drawRect(boundingBox, selectedPaint)
+                selected.bounds = boundingBox
+                selected.draw(canvas)
             } else {
-                canvas.drawRect(boundingBox, unselectedPaint)
+                unselected.bounds = boundingBox
+                unselected.draw(canvas)
             }
         }
 
@@ -213,7 +211,7 @@ class OCRConfirmation : AppCompatActivity() {
         viewToBitmapWidthScaleFactor = mutableBitmap.width.toDouble() / binding.imageView.width.toDouble()
 
         // put the new image on screen
-        binding.imageView.setImageBitmap(mutableBitmap)
+        binding.imageView.setImageBitmap(copiedBitmap)
         binding.imageView.scaleType = ImageView.ScaleType.CENTER_CROP
     }
 }
