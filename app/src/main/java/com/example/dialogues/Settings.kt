@@ -22,6 +22,7 @@ class Settings : AppCompatActivity() {
     //private  var selectedVoice: String = ""
     private var selectedil: String = ""
     private var selectedol: String = ""
+    private var speedValueText: String = ""
     //private lateinit var sharedPreferences: SharedPreferences
     private lateinit var talkspeedPrefs: SharedPreferences
     private lateinit var pitchPrefs: SharedPreferences
@@ -54,10 +55,12 @@ class Settings : AppCompatActivity() {
         haptic_feedback.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 HapticFeedbackOn = true
+                Toast.makeText(this, "Haptic Feedback Enabled", Toast.LENGTH_SHORT).show()
                 vibrateDevice()
                 }
             else {
                 HapticFeedbackOn = false
+                Toast.makeText(this, "Haptic Feedback Disabled", Toast.LENGTH_SHORT).show()
                 }
             hapticFeedbackPreferences.edit().putBoolean("HapticFeedbackEnabled", HapticFeedbackOn).apply()
             }
@@ -85,16 +88,22 @@ class Settings : AppCompatActivity() {
         //}
         val speedBar = findViewById<SeekBar>(R.id.speedbar)
         val pitchBar = findViewById<SeekBar>(R.id.pitchbar)
+        val speedText =findViewById<TextView>(R.id.speedtext)
+        val pitchText =findViewById<TextView>(R.id.pitchtext)
+
 
         speedBar.progress = talkspeedPrefs.getInt("speed", 50)
         pitchBar.progress = pitchPrefs.getInt("pitch", 50)
 
+        speedText.text = talkspeedPrefs.getInt("speed", 50).toString()
+        pitchText.text = pitchPrefs.getInt("pitch", 50).toString()
 
         speedBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 val prefeditor = talkspeedPrefs.edit()
                 prefeditor.putInt("speed", progress)
                 prefeditor.apply()
+                speedText.text = progress.toString()
             }
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
@@ -104,6 +113,7 @@ class Settings : AppCompatActivity() {
                 val pref2editor = pitchPrefs.edit()
                 pref2editor.putInt("pitch", progress)
                 pref2editor.apply()
+                pitchText.text = progress.toString()
             }
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
@@ -170,19 +180,15 @@ class Settings : AppCompatActivity() {
             val pauseSpeakeditor = pauseSpeakPreferences.edit()
             if (isChecked) {
                 pauseSpeakeditor.putBoolean("switched", true)
+                Toast.makeText(this, "Pausing Feature Enabled", Toast.LENGTH_SHORT).show()
                 vibrateDevice()
             } else {
                 pauseSpeakeditor.remove("switched")
+                Toast.makeText(this, "Pausing Feature Disabled", Toast.LENGTH_SHORT).show()
             }
             pauseSpeakeditor.apply()
         }
-        val box = findViewById<View>(R.id.box)
 
-        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-            box.setBackgroundColor(resources.getColor(R.color.dark_mode_color))
-        } else {
-            box.setBackgroundColor(resources.getColor(R.color.notwhite))
-        }
         //Dark/light mode code
         val lightdarkbutton = findViewById<Switch>(R.id.switch_dark_mode)
         val nightModeRetriever = AppCompatDelegate.getDefaultNightMode()
@@ -194,8 +200,11 @@ class Settings : AppCompatActivity() {
 
         lightdarkbutton.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
+                Toast.makeText(this, "Dark Mode Enabled", Toast.LENGTH_SHORT).show()
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+
             } else {
+                Toast.makeText(this, "Light Mode Enabled", Toast.LENGTH_SHORT).show()
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
             }

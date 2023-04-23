@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
-    <View
+   <!-- <View
         android:id = "@+id/view1"
         android:layout_width = "match_parent"
         android:layout_height = "1dp"
@@ -29,8 +29,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.11"
-        />
-    <View
+        /> -->
+   <!-- <View
         android:id = "@+id/view2"
         android:layout_width = "match_parent"
         android:layout_height = "1dp"
@@ -42,8 +42,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.43"
 
-        />
-    <View
+        /> -->
+   <!-- <View
         android:layout_width = "match_parent"
         android:layout_height = "1dp"
         android:background = "@color/grey"
@@ -54,8 +54,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.64"
         android:id = "@+id/view3"
-        />
-    <View
+        /> -->
+  <!--  <View
         android:layout_width = "match_parent"
         android:layout_height = "1dp"
         android:background = "@color/grey"
@@ -65,8 +65,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.76"
-        />
-    <View
+        /> -->
+   <!-- <View
         android:layout_width = "match_parent"
         android:layout_height = "1dp"
         android:background = "@color/grey"
@@ -77,9 +77,9 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.88"
         android:id = "@+id/view4"
-        />
+        /> -->
 
-    <SeekBar
+   <SeekBar
         android:id="@+id/speedbar"
         android:layout_width="223dp"
         android:layout_height="14dp"
@@ -93,6 +93,21 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.50" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lexend"
+        android:text=""
+        android:id ="@+id/speedtext"
+        android:textColor = "?android:textColorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.68"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.50"
+        android:textSize ="20sp"/>
+    <!-- FOR EMULATOR USE: app:layout_constraintHorizontal_bias="0.55" -->
 
     <SeekBar
         android:id="@+id/pitchbar"
@@ -108,6 +123,21 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.605" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lexend"
+        android:id = "@+id/pitchtext"
+        android:text=""
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.68"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textColor = "?android:textColorPrimary"
+        app:layout_constraintVertical_bias="0.605"
+        android:textSize ="20sp"/>
+    <!-- FOR EMULATOR USE: app:layout_constraintHorizontal_bias="0.55" -->
     <Switch
         android:id="@+id/switcher"
         android:layout_width="210dp"
@@ -132,10 +162,10 @@
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.822"
+        app:layout_constraintHorizontal_bias="0.835"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.82"
+        app:layout_constraintVertical_bias="0.825"
         app:thumbTint="#FFFFFF"
         app:trackTint="#00A3FF" />
 
@@ -151,7 +181,7 @@
         app:layout_constraintHorizontal_bias="0.822"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.94"
+        app:layout_constraintVertical_bias="0.95"
         app:thumbTint="#FFFFFF"
         app:trackTint="#00A3FF" />
 
@@ -198,6 +228,9 @@
         app:layout_constraintVertical_bias="0.46"
         android:textSize ="20sp"/>
 
+
+
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -212,6 +245,8 @@
         app:layout_constraintVertical_bias="0.56"
         android:textSize ="20sp"/>
 
+
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -223,7 +258,7 @@
         app:layout_constraintHorizontal_bias="0.037"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.149"
+        app:layout_constraintVertical_bias="0.140"
         android:textSize ="20sp"/>
 
 
