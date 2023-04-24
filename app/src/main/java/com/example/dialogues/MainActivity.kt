@@ -39,6 +39,8 @@ class MainActivity : AppCompatActivity() {
     
     private var imageCapture:ImageCapture?=null
 
+    private var preview:Preview?=null
+
     private lateinit var cameraExecutor: ExecutorService
 
     private lateinit var outputDirectory: File
@@ -100,14 +102,14 @@ class MainActivity : AppCompatActivity() {
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
             // Preview
-            val preview = Preview.Builder()
+            preview = Preview.Builder()
                 .build()
                 .also {
                     it.setSurfaceProvider(binding.previewView.surfaceProvider)
                 }
 
-            imageCapture = ImageCapture.Builder()
-                .build()
+            imageCapture = ImageCapture.Builder().setFlashMode(ImageCapture.FLASH_MODE_OFF).build()
+
 
             // Select back camera as a default
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
@@ -145,14 +147,14 @@ class MainActivity : AppCompatActivity() {
                 override fun onImageSaved(outputFileResults: OutputFileResults) {
 
                     val savedUri = Uri.fromFile(photoFile)
-
                     val msg = "Photo saved"
                     Log.d(TAG, "On success code23: " + savedUri.toString())
                     Toast.makeText(this@MainActivity, "$msg $savedUri", Toast.LENGTH_SHORT).show()
                     var intent = Intent(this@MainActivity, OCRConfirmation::class.java)
                     intent.putExtra("imglocation", savedUri.toString())
                     startActivity(intent)
-                    findViewById<RelativeLayout>(R.id.loadingPanel).visibility = View.GONE
+                    ProcessCameraProvider.getInstance(this@MainActivity).get().unbind(preview) //freeze the images put after finsihsing files
+                    findViewById<RelativeLayout>(R.id.loadingPanel).visibility = View.VISIBLE
 
                     transportfunc(savedUri)
 
@@ -191,8 +193,22 @@ class MainActivity : AppCompatActivity() {
         cameraExecutor = Executors.newSingleThreadExecutor()
 
 //        var switch1 = findViewById<Switch>(R.id.switch1)
-//        var switch2 = findViewById<Switch>(R.id.switch2)
+         //var switch2 = findViewById<Switch>(R.id.switch2)
         //var switch3 = findViewById<Switch>(R.id.switch3)
+
+
+        var switch2 = findViewById<Switch>(R.id.switch2)// problem with this swithc is that it is not persistance needs to be check on resuem again
+
+
+        switch2.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                imageCapture?.flashMode = ImageCapture.FLASH_MODE_ON
+                Log.d(TAG, "Flash enabled: ")
+            } else {
+                imageCapture?.flashMode = ImageCapture.FLASH_MODE_OFF
+                Log.d(TAG, "Flash disabled: ")
+            }
+        }
 
         val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         fun vibrateTime() {
@@ -210,7 +226,6 @@ class MainActivity : AppCompatActivity() {
 //        }
         camera_Click.setOnClickListener {
 //            var intent = Intent(this, ImageScreen::class.java)
-            findViewById<RelativeLayout>(R.id.loadingPanel).visibility = View.VISIBLE
             takePhoto()
             vibrateTime()
             //Log.d(TAG, " code 234: $URI")
@@ -247,4 +262,10 @@ class MainActivity : AppCompatActivity() {
             //textView.setText("")
         }
     }
+    override fun onResume() {
+        super.onResume()
+        findViewById<RelativeLayout>(R.id.loadingPanel).visibility = View.GONE
+        startCamera()
+    }
+
 }
