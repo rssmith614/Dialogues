@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Vibrator
+import android.speech.tts.Voice
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -23,6 +24,10 @@ import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.dialogues.databinding.ActivityMainBinding
+import com.google.mlkit.common.model.DownloadConditions
+import com.google.mlkit.nl.translate.TranslateLanguage
+import com.google.mlkit.nl.translate.Translation
+import com.google.mlkit.nl.translate.TranslatorOptions
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -172,6 +177,8 @@ class MainActivity : AppCompatActivity() {
 //        URI = link.toString()
     }
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -222,10 +229,8 @@ class MainActivity : AppCompatActivity() {
         val olPreferences = getSharedPreferences("olPreferences", MODE_PRIVATE)
         val selectedol = olPreferences.getString("Selectedol","").toString()
 
-
         val sharedPreferences = getSharedPreferences("VoicePreferences", MODE_PRIVATE)
         val selectedvoice = sharedPreferences.getString("SelectedVoice", "").toString()
-
 
         val pauseSpeakPreferences = getSharedPreferences("pauseSpeakPrefs", MODE_PRIVATE)
         val pauseSpeakPrefSwitch = pauseSpeakPreferences.getBoolean("switched", false)

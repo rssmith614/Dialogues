@@ -1,19 +1,26 @@
 package com.example.dialogues
 
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
+import android.media.AudioManager
 import android.os.Bundle
+import android.os.Vibrator
+import android.preference.PreferenceManager
 import android.speech.tts.TextToSpeech
 import android.speech.tts.Voice
+import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
-import java.util.Locale
+import java.util.*
 
 
 class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListener, TextToSpeech.OnInitListener  {
@@ -30,6 +37,12 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
     private lateinit var targetSpinner :Spinner
     private  lateinit var ttsSource :TextToSpeech
     private  lateinit var ttsTarget :TextToSpeech
+    private lateinit var talkspeedPrefs: SharedPreferences
+    private lateinit var pitchPrefs: SharedPreferences
+    private var pitchvoice: Float = 0.0f
+    private var talkspeed: Float = 0.0f
+    private val barStarter = 50
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,8 +55,10 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
         //inputString = "Hello World"
         sourceText = findViewById<TextView>(R.id.ts_textView)
         sourceText.text = inputString
+        sourceText.movementMethod = ScrollingMovementMethod()
 
         targetText = findViewById<TextView>(R.id.ts_textView2)
+        targetText.movementMethod = ScrollingMovementMethod()
 
         sourceSpinner = findViewById<Spinner>(R.id.ts_spinner)
         sourceSpinner.onItemSelectedListener = this
@@ -111,8 +126,18 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
 
     }
 
+    private fun vibrateTime() { //HAPTIC FEEDBACK
+        val hapticFeedbackPreferences = getSharedPreferences("hfPrefs", Context.MODE_PRIVATE)
+        val HapticFeedbackOn = hapticFeedbackPreferences.getBoolean("HapticFeedbackEnabled", false)
+        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        if (HapticFeedbackOn) {
+            vibrator.vibrate(50)
+        }
+    }
+
     override fun onResume() {
         super.onResume()
+
         val spinnerArray = resources.getStringArray(R.array.LanguageOptions)
 
         var sharedPreferences = getSharedPreferences("ilPreferences", MODE_PRIVATE)
@@ -132,8 +157,6 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
         val item = parent.getItemAtPosition(position).toString()
-        Toast.makeText(parent.context, item, Toast.LENGTH_LONG).show()
-
 
 
         val sourceChoice = sourceSpinner.selectedItemPosition
@@ -141,11 +164,13 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
         var preferenceEditor = sharedPreferences.edit()
         preferenceEditor.putString("Selectedil", sourceSpinner.selectedItem.toString())
         preferenceEditor.apply()
+        vibrateTime()
 
         val targetChoice = targetSpinner.selectedItemPosition
         sharedPreferences = getSharedPreferences("olPreferences", MODE_PRIVATE)
         preferenceEditor = sharedPreferences.edit()
-        preferenceEditor.putString("Selectedol",  targetSpinner.selectedItem.toString())
+        preferenceEditor.putString("Selectedol", targetSpinner.selectedItem.toString())
+        vibrateTime()
         preferenceEditor.apply()
 
 
@@ -185,10 +210,6 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
                 val voice = Voice("de-de-x-nfh-local", Locale.GERMANY, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)
                 ttsSource.setVoice(voice)
             }
-            "Hindi" -> sourceLanguage = "hi"
-            "Chinese" -> sourceLanguage = "zh"
-            "Japanese" -> sourceLanguage = "ja"
-            "Arabic" -> sourceLanguage = "ar"
         }
 
         when(target.selectedItem.toString()){
@@ -214,10 +235,6 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
                 val voice = Voice("de-de-x-nfh-local", Locale.GERMANY, Voice.QUALITY_NORMAL, Voice.LATENCY_NORMAL, false, null)
                 ttsTarget.setVoice(voice)
             }
-            "Hindi" -> targetLanguage = "hi"
-            "Chinese" -> targetLanguage = "zh"
-            "Japanese" -> targetLanguage = "ja"
-            "Arabic" -> targetLanguage = "ar"
         }
 
         translateString(inputString)
@@ -236,15 +253,37 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
         var conditions = DownloadConditions.Builder()
             .requireWifi()
             .build()
-
+        findViewById<ConstraintLayout>(R.id.loadingPanel).visibility = View.VISIBLE
         translator.downloadModelIfNeeded(conditions)
             .addOnSuccessListener {
                 onModelSuccess(translator)
 
             }
-            .addOnFailureListener { Log.d("MODEL", "Model download Failed") }
+            .addOnFailureListener {
+                Log.d("MODEL", "Model download Failed")
+                findViewById<ConstraintLayout>(R.id.loadingPanel).visibility = View.GONE
+            }
 
 
+
+
+    }
+    private fun getTalkSpeed(): Float { //Talk speed
+        talkspeedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
+        talkspeed = talkspeedPrefs.getInt("speed", barStarter).toFloat() / 50.0f
+        if (talkspeed == 0f) {
+            return 0.10f
+        }
+        return talkspeed
+    }
+
+    private fun getPitchSpeed(): Float { //Pitch Speed
+        pitchPrefs = PreferenceManager.getDefaultSharedPreferences(this)
+        pitchvoice = pitchPrefs.getInt("pitch", barStarter).toFloat() / 50.0f
+        if (pitchvoice == 0f) {
+            return 0.10f
+        }
+        return pitchvoice
     }
 
     fun onModelSuccess (translator: com.google.mlkit.nl.translate.Translator){
@@ -253,9 +292,13 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
             .addOnSuccessListener {
                     translatedText -> targetText.text  = translatedText
                 outputString = translatedText
+                findViewById<ConstraintLayout>(R.id.loadingPanel).visibility = View.GONE
 
             }
-            .addOnFailureListener { Log.d("TRANSLATION", "Translate Failed") }
+            .addOnFailureListener {
+                findViewById<ConstraintLayout>(R.id.loadingPanel).visibility = View.GONE
+                Log.d("TRANSLATION", "Translate Failed")
+            }
 
     }
 
@@ -263,8 +306,34 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
 
 
     fun speakString(tts: TextToSpeech, input: String){
-
-        tts.speak(input, TextToSpeech.QUEUE_ADD, null)
+        val pauseSpeakPreferences = getSharedPreferences("pauseSpeakPrefs", MODE_PRIVATE)
+        val pauseSpeakPrefSwitch = pauseSpeakPreferences.getBoolean("switched", false)
+        val talkspeed = getTalkSpeed()
+        val pitchvoice = getPitchSpeed()
+        tts.setSpeechRate(talkspeed)
+        tts.setPitch(pitchvoice)
+        if(pauseSpeakPrefSwitch == true){ //PAUSE AFTER EACH WORD FEATURE
+            val alttext = input.split(" ")
+            var i = 0
+            while (i < alttext.size) {
+                tts.speak(alttext[i], TextToSpeech.QUEUE_ADD, null) //tts speaks
+                i++
+            }
+        }
+        else {
+            tts.speak(input, TextToSpeech.QUEUE_ADD, null)
+        }
 
     }
+    override fun onPause() { //STOPS TTS FROM SPEAKING OUTSIDE THE APP
+        super.onPause()
+        if (ttsSource.isSpeaking) {
+            ttsSource.stop()
+        }
+        if (ttsTarget.isSpeaking) {
+            ttsTarget.stop()
+        }
+    }
+
+
 }

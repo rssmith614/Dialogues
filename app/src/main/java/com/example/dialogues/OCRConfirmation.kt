@@ -92,11 +92,12 @@ class OCRConfirmation : AppCompatActivity() {
             // call Translation activity
             val intent = Intent(this, TranslationScreen::class.java).putExtra("Text", result)
             startActivity(intent)
-            vibrateTime()
+            //vibrateTime()
         }
 
         findViewById<Button>(R.id.back_button).setOnClickListener {
             onBackPressed()
+            vibrateTime()
         }
 
         findViewById<Button>(R.id.settings_button).setOnClickListener {
