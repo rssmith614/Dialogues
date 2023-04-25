@@ -100,7 +100,7 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
 
         val button = findViewById<Button>(R.id.ts_button)
 
-        button.setOnClickListener{
+        button.setOnClickListener{ //STOP Functionality
             vibrateTime()
             if (ttsSource.isSpeaking) {
                 ttsSource.stop()
@@ -114,7 +114,7 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
 
         val button2 = findViewById<Button>(R.id.ts_button2)
 
-        button2.setOnClickListener{
+        button2.setOnClickListener{ //STOP Functionality
             vibrateTime()
             if (ttsTarget.isSpeaking) {
 
@@ -138,7 +138,7 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
 
     }
 
-    private fun vibrateTime() {
+    private fun vibrateTime() { //HAPTIC FEEDBACK
         val hapticFeedbackPreferences = getSharedPreferences("hfPrefs", Context.MODE_PRIVATE)
         val HapticFeedbackOn = hapticFeedbackPreferences.getBoolean("HapticFeedbackEnabled", false)
         val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
@@ -292,7 +292,7 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
 
 
     }
-    private fun getTalkSpeed(): Float {
+    private fun getTalkSpeed(){ //Talk speed
         talkspeedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
         talkspeed = talkspeedPrefs.getInt("speed", barStarter).toFloat() / 50.0f
         if (talkspeed == 0f) {
@@ -301,7 +301,7 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
         return talkspeed
     }
 
-    private fun getPitchSpeed(): Float {
+    private fun getPitchSpeed(){ //Pitch Speed 
         pitchPrefs = PreferenceManager.getDefaultSharedPreferences(this)
         pitchvoice = pitchPrefs.getInt("pitch", barStarter).toFloat() / 50.0f
         if (pitchvoice == 0f) {
@@ -332,7 +332,7 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
         val pitchvoice = getPitchSpeed()
         tts.setSpeechRate(talkspeed)
         tts.setPitch(pitchvoice)
-        if(pauseSpeakPrefSwitch == true){
+        if(pauseSpeakPrefSwitch == true){ //PAUSE AFTER EACH WORD FEATURE 
             val alttext = input.split(" ")
             var i = 0
             while (i < alttext.size) {
@@ -345,7 +345,7 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
         }
 
     }
-    override fun onPause() {
+    override fun onPause() { //STOPS TTS FROM SPEAKING OUTSIDE THE APP
         super.onPause()
         if (ttsSource.isSpeaking) {
             ttsSource.stop()
