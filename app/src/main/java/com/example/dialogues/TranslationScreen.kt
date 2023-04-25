@@ -268,7 +268,7 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
 
 
     }
-    private fun getTalkSpeed(){ //Talk speed
+    private fun getTalkSpeed(): Float { //Talk speed
         talkspeedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
         talkspeed = talkspeedPrefs.getInt("speed", barStarter).toFloat() / 50.0f
         if (talkspeed == 0f) {
@@ -277,7 +277,7 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
         return talkspeed
     }
 
-    private fun getPitchSpeed(){ //Pitch Speed
+    private fun getPitchSpeed(): Float { //Pitch Speed
         pitchPrefs = PreferenceManager.getDefaultSharedPreferences(this)
         pitchvoice = pitchPrefs.getInt("pitch", barStarter).toFloat() / 50.0f
         if (pitchvoice == 0f) {
