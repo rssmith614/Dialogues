@@ -45,6 +45,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var outputDirectory: File
 
+    var ocrControl = false;
+
 
 //    private var URI = ""
 
@@ -152,6 +154,7 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this@MainActivity, "$msg $savedUri", Toast.LENGTH_SHORT).show()
                     var intent = Intent(this@MainActivity, OCRConfirmation::class.java)
                     intent.putExtra("imglocation", savedUri.toString())
+                    intent.putExtra("Confirm", ocrControl)
                     startActivity(intent)
                     ProcessCameraProvider.getInstance(this@MainActivity).get().unbind(preview) //freeze the images put after finsihsing files
                     findViewById<RelativeLayout>(R.id.loadingPanel).visibility = View.VISIBLE
@@ -196,16 +199,30 @@ class MainActivity : AppCompatActivity() {
          //var switch2 = findViewById<Switch>(R.id.switch2)
         //var switch3 = findViewById<Switch>(R.id.switch3)
 
-
+        var switch1 = findViewById<Switch>(R.id.switch1)
         var switch2 = findViewById<Switch>(R.id.switch2)// problem with this swithc is that it is not persistance needs to be check on resuem again
 
+
+        switch1.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                ocrControl = true
+                Toast.makeText(this, "Auto Enabled", Toast.LENGTH_SHORT).show()
+//                Log.d(TAG, "Flash enabled: ")
+            } else {
+                ocrControl = false
+                Toast.makeText(this, "Manual Enabled", Toast.LENGTH_SHORT).show()
+//                Log.d(TAG, "Flash disabled: ")
+            }
+        }
 
         switch2.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 imageCapture?.flashMode = ImageCapture.FLASH_MODE_ON
                 Log.d(TAG, "Flash enabled: ")
+                Toast.makeText(this, "Flash Enabled", Toast.LENGTH_SHORT).show()
             } else {
                 imageCapture?.flashMode = ImageCapture.FLASH_MODE_OFF
+                Toast.makeText(this, "Flash Disabled", Toast.LENGTH_SHORT).show()
                 Log.d(TAG, "Flash disabled: ")
             }
         }
