@@ -46,6 +46,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var outputDirectory: File
 
     var ocrControl = false;
+    var flashControl = false
+    var switchControl2 = true
+
 
 
 //    private var URI = ""
@@ -110,7 +113,13 @@ class MainActivity : AppCompatActivity() {
                     it.setSurfaceProvider(binding.previewView.surfaceProvider)
                 }
 
-            imageCapture = ImageCapture.Builder().setFlashMode(ImageCapture.FLASH_MODE_OFF).build()
+            if(flashControl == false){
+                imageCapture = ImageCapture.Builder().setFlashMode(ImageCapture.FLASH_MODE_OFF).build()
+            }
+            else{
+                imageCapture = ImageCapture.Builder().setFlashMode(ImageCapture.FLASH_MODE_ON).build()
+            }
+
 
 
             // Select back camera as a default
@@ -202,31 +211,6 @@ class MainActivity : AppCompatActivity() {
         var switch1 = findViewById<Switch>(R.id.switch1)
         var switch2 = findViewById<Switch>(R.id.switch2)// problem with this swithc is that it is not persistance needs to be check on resuem again
 
-
-        switch1.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                ocrControl = true
-                Toast.makeText(this, "Auto Enabled", Toast.LENGTH_SHORT).show()
-//                Log.d(TAG, "Flash enabled: ")
-            } else {
-                ocrControl = false
-                Toast.makeText(this, "Manual Enabled", Toast.LENGTH_SHORT).show()
-//                Log.d(TAG, "Flash disabled: ")
-            }
-        }
-
-        switch2.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                imageCapture?.flashMode = ImageCapture.FLASH_MODE_ON
-                Log.d(TAG, "Flash enabled: ")
-                Toast.makeText(this, "Flash Enabled", Toast.LENGTH_SHORT).show()
-            } else {
-                imageCapture?.flashMode = ImageCapture.FLASH_MODE_OFF
-                Toast.makeText(this, "Flash Disabled", Toast.LENGTH_SHORT).show()
-                Log.d(TAG, "Flash disabled: ")
-            }
-        }
-
         val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         fun vibrateTime() {
             val hapticFeedbackPreferences = getSharedPreferences("hfPrefs", Context.MODE_PRIVATE)
@@ -235,6 +219,46 @@ class MainActivity : AppCompatActivity() {
                 vibrator.vibrate(50)
             }
         }
+
+        val switchOneChecked = getSharedPreferences("switchOneChecked", MODE_PRIVATE)
+        var switchChecker = switchOneChecked.getBoolean("switch", false)
+        switch1.isChecked = switchChecker
+
+        switch1.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                vibrateTime()
+                ocrControl = true
+                Toast.makeText(this, "Auto Enabled", Toast.LENGTH_SHORT).show()
+//                Log.d(TAG, "Flash enabled: ")
+            } else {
+                vibrateTime()
+                ocrControl = false
+                Toast.makeText(this, "Manual Enabled", Toast.LENGTH_SHORT).show()
+//                Log.d(TAG, "Flash disabled: ")
+            }
+        }
+
+        val switchTwoChecked = getSharedPreferences("switchTwoChecked", MODE_PRIVATE)
+        var switch2Checker = switchOneChecked.getBoolean("switch", false)
+        switch2.isChecked = switch2Checker
+
+        switch2.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                vibrateTime()
+                imageCapture?.flashMode = ImageCapture.FLASH_MODE_ON
+                Log.d(TAG, "Flash enabled: ")
+                flashControl = true;
+                Toast.makeText(this, "Flash Enabled", Toast.LENGTH_SHORT).show()
+            } else {
+                vibrateTime()
+                imageCapture?.flashMode = ImageCapture.FLASH_MODE_OFF
+                Toast.makeText(this, "Flash Disabled", Toast.LENGTH_SHORT).show()
+                flashControl = false
+                Log.d(TAG, "Flash disabled: ")
+            }
+        }
+
+
         var camera_Click = findViewById<Button>(R.id.camera_capture_button)
 //        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
 //            camera_Click.setBackgroundColor(resources.getColor(R.color.dark_mode_color))
@@ -283,6 +307,9 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         findViewById<RelativeLayout>(R.id.loadingPanel).visibility = View.GONE
         startCamera()
+
+
+
     }
 
 }
