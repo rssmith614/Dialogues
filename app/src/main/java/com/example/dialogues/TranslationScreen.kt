@@ -41,6 +41,7 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
     private var pitchvoice: Float = 0.0f
     private var talkspeed: Float = 0.0f
     private val barStarter = 50
+    private var isSpeaking = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,16 +94,11 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
         val targetSpinnerArray = resources.getStringArray(R.array.LanguageOptions2)
         targetSpinner.setSelection(targetSpinnerArray.indexOf(selectedPreference))
 
-
-
-
-
-
         val button = findViewById<Button>(R.id.ts_button)
 
-        button.setOnClickListener{ //STOP Functionality
+        button.setOnClickListener {
             vibrateTime()
-            if (ttsSource.isSpeaking) {
+            if (isSpeaking) { //STOP BUTTON FUNCTIONALITY
                 ttsSource.stop()
             } else {
                 if (inputString != null) {
@@ -110,14 +106,15 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
                     speakString(ttsSource, inputString)
                 }
             }
+            isSpeaking = !isSpeaking
         }
+
 
         val button2 = findViewById<Button>(R.id.ts_button2)
 
-        button2.setOnClickListener{ //STOP Functionality
+        button2.setOnClickListener { //STOP BUTTON FUNCTIONALITY
             vibrateTime()
-            if (ttsTarget.isSpeaking) {
-
+            if (isSpeaking) {
                 ttsTarget.stop()
             } else {
                 if (outputString != null) {
@@ -125,6 +122,7 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
                     speakString(ttsTarget, outputString)
                 }
             }
+            isSpeaking = !isSpeaking
         }
 
         val settingsButton = findViewById<Button>(R.id.settings_button)
