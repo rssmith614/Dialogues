@@ -42,6 +42,7 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
     private var pitchvoice: Float = 0.0f
     private var talkspeed: Float = 0.0f
     private val barStarter = 50
+    private var isSpeaking = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,25 +95,34 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
         setLanguages(sourceSpinner, targetSpinner)
         translateString(inputString)
 
-
-
-
         val button = findViewById<Button>(R.id.ts_button)
 
-        button.setOnClickListener{
-            if (inputString != null) {
-                setLanguages(sourceSpinner, targetSpinner)
-                speakString(ttsSource, inputString)
+        button.setOnClickListener {
+            vibrateTime()
+            if (isSpeaking) { //STOP BUTTON FUNCTIONALITY
+                ttsSource.stop()
+            } else {
+                if (inputString != null) {
+                    setLanguages(sourceSpinner, targetSpinner)
+                    speakString(ttsSource, inputString)
+                }
             }
+            isSpeaking = !isSpeaking
         }
 
         val button2 = findViewById<Button>(R.id.ts_button2)
 
-        button2.setOnClickListener{
-            if (outputString != null) {
-                setLanguages(sourceSpinner, targetSpinner)
-                speakString(ttsTarget, outputString)
+        button2.setOnClickListener { //STOP BUTTON FUNCTIONALITY
+            vibrateTime()
+            if (isSpeaking) {
+                ttsTarget.stop()
+            } else {
+                if (outputString != null) {
+                    setLanguages(sourceSpinner, targetSpinner)
+                    speakString(ttsTarget, outputString)
+                }
             }
+            isSpeaking = !isSpeaking
         }
 
         val settingsButton = findViewById<Button>(R.id.settings_button)
@@ -121,9 +131,7 @@ class TranslationScreen : AppCompatActivity(), AdapterView.OnItemSelectedListene
             val intent = Intent(this, Settings::class.java)
             startActivity(intent)
         }
-
-
-
+        
     }
 
     private fun vibrateTime() { //HAPTIC FEEDBACK
