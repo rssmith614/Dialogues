@@ -44,9 +44,16 @@ class MainActivity : AppCompatActivity() {
     
     private var imageCapture:ImageCapture?=null
 
+    private var preview:Preview?=null
+
     private lateinit var cameraExecutor: ExecutorService
 
     private lateinit var outputDirectory: File
+
+    var ocrControl = true;
+    var flashControl = false
+    var switchControl2 = true
+
 
 
 //    private var URI = ""
@@ -105,14 +112,20 @@ class MainActivity : AppCompatActivity() {
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
             // Preview
-            val preview = Preview.Builder()
+            preview = Preview.Builder()
                 .build()
                 .also {
                     it.setSurfaceProvider(binding.previewView.surfaceProvider)
                 }
 
-            imageCapture = ImageCapture.Builder()
-                .build()
+            if(flashControl == false){
+                imageCapture = ImageCapture.Builder().setFlashMode(ImageCapture.FLASH_MODE_OFF).build()
+            }
+            else{
+                imageCapture = ImageCapture.Builder().setFlashMode(ImageCapture.FLASH_MODE_ON).build()
+            }
+
+
 
             // Select back camera as a default
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
@@ -150,15 +163,15 @@ class MainActivity : AppCompatActivity() {
                 override fun onImageSaved(outputFileResults: OutputFileResults) {
 
                     val savedUri = Uri.fromFile(photoFile)
-
                     val msg = "Photo saved"
                     Log.d(TAG, "On success code23: " + savedUri.toString())
                     Toast.makeText(this@MainActivity, "$msg $savedUri", Toast.LENGTH_SHORT).show()
                     var intent = Intent(this@MainActivity, OCRConfirmation::class.java)
                     intent.putExtra("imglocation", savedUri.toString())
-                    intent.putExtra("Confirm", true)
+                    intent.putExtra("Confirm", ocrControl)
                     startActivity(intent)
-                    findViewById<RelativeLayout>(R.id.loadingPanel).visibility = View.GONE
+                    ProcessCameraProvider.getInstance(this@MainActivity).get().unbind(preview) //freeze the images put after finsihsing files
+                    findViewById<RelativeLayout>(R.id.loadingPanel).visibility = View.VISIBLE
 
                     transportfunc(savedUri)
 
@@ -199,8 +212,11 @@ class MainActivity : AppCompatActivity() {
         cameraExecutor = Executors.newSingleThreadExecutor()
 
 //        var switch1 = findViewById<Switch>(R.id.switch1)
-//        var switch2 = findViewById<Switch>(R.id.switch2)
+         //var switch2 = findViewById<Switch>(R.id.switch2)
         //var switch3 = findViewById<Switch>(R.id.switch3)
+
+        var switch1 = findViewById<Switch>(R.id.switch1)
+        var switch2 = findViewById<Switch>(R.id.switch2)// problem with this swithc is that it is not persistance needs to be check on resuem again
 
         val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         fun vibrateTime() {
@@ -210,6 +226,46 @@ class MainActivity : AppCompatActivity() {
                 vibrator.vibrate(50)
             }
         }
+
+        val switchOneChecked = getSharedPreferences("switchOneChecked", MODE_PRIVATE)
+        var switchChecker = switchOneChecked.getBoolean("switch", false)
+        switch1.isChecked = switchChecker
+
+        switch1.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                vibrateTime()
+                ocrControl = false
+                Toast.makeText(this, "Auto Enabled", Toast.LENGTH_SHORT).show()
+//                Log.d(TAG, "Flash enabled: ")
+            } else {
+                vibrateTime()
+                ocrControl = true
+                Toast.makeText(this, "Manual Enabled", Toast.LENGTH_SHORT).show()
+//                Log.d(TAG, "Flash disabled: ")
+            }
+        }
+
+        val switchTwoChecked = getSharedPreferences("switchTwoChecked", MODE_PRIVATE)
+        var switch2Checker = switchOneChecked.getBoolean("switch", false)
+        switch2.isChecked = switch2Checker
+
+        switch2.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                vibrateTime()
+                imageCapture?.flashMode = ImageCapture.FLASH_MODE_ON
+                Log.d(TAG, "Flash enabled: ")
+                flashControl = true;
+                Toast.makeText(this, "Flash Enabled", Toast.LENGTH_SHORT).show()
+            } else {
+                vibrateTime()
+                imageCapture?.flashMode = ImageCapture.FLASH_MODE_OFF
+                Toast.makeText(this, "Flash Disabled", Toast.LENGTH_SHORT).show()
+                flashControl = false
+                Log.d(TAG, "Flash disabled: ")
+            }
+        }
+
+
         var camera_Click = findViewById<Button>(R.id.camera_capture_button)
 //        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
 //            camera_Click.setBackgroundColor(resources.getColor(R.color.dark_mode_color))
@@ -218,7 +274,6 @@ class MainActivity : AppCompatActivity() {
 //        }
         camera_Click.setOnClickListener {
 //            var intent = Intent(this, ImageScreen::class.java)
-            findViewById<RelativeLayout>(R.id.loadingPanel).visibility = View.VISIBLE
             takePhoto()
             vibrateTime()
             //Log.d(TAG, " code 234: $URI")
@@ -253,4 +308,13 @@ class MainActivity : AppCompatActivity() {
             //textView.setText("")
         }
     }
+    override fun onResume() {
+        super.onResume()
+        findViewById<RelativeLayout>(R.id.loadingPanel).visibility = View.GONE
+        startCamera()
+
+
+
+    }
+
 }
