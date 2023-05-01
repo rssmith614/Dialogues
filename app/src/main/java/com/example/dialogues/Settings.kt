@@ -9,6 +9,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import android.os.Vibrator
+import androidx.core.content.ContextCompat
 
 class Settings : AppCompatActivity() {
 
@@ -18,10 +19,11 @@ class Settings : AppCompatActivity() {
     private lateinit var dropdown1: ImageButton
     private lateinit var dropdown2: ImageButton
     private lateinit var dropdown3: ImageButton
-    private  var selectedVoice: String = ""
+    //private  var selectedVoice: String = ""
     private var selectedil: String = ""
     private var selectedol: String = ""
-    private lateinit var sharedPreferences: SharedPreferences
+    private var speedValueText: String = ""
+    //private lateinit var sharedPreferences: SharedPreferences
     private lateinit var talkspeedPrefs: SharedPreferences
     private lateinit var pitchPrefs: SharedPreferences
     private lateinit var ilPreferences: SharedPreferences
@@ -33,12 +35,12 @@ class Settings : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings_tts)
         val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        voiceSpinner = findViewById(R.id.spinner)
+        //voiceSpinner = findViewById(R.id.spinner)
         ilSpinner = findViewById(R.id.ilspinner)
         olSpinner = findViewById(R.id.olspinner)
         dropdown1 = findViewById(R.id.spinoptions)
         dropdown2 = findViewById(R.id.spinoptions2)
-        dropdown3 = findViewById(R.id.spinoptions3)
+        //dropdown3 = findViewById(R.id.spinoptions3)
         fun vibrateDevice() {
             if (HapticFeedbackOn == true) {
                 vibrator.vibrate(50)
@@ -53,10 +55,12 @@ class Settings : AppCompatActivity() {
         haptic_feedback.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 HapticFeedbackOn = true
+                Toast.makeText(this, "Haptic Feedback Enabled", Toast.LENGTH_SHORT).show()
                 vibrateDevice()
                 }
             else {
                 HapticFeedbackOn = false
+                Toast.makeText(this, "Haptic Feedback Disabled", Toast.LENGTH_SHORT).show()
                 }
             hapticFeedbackPreferences.edit().putBoolean("HapticFeedbackEnabled", HapticFeedbackOn).apply()
             }
@@ -77,23 +81,29 @@ class Settings : AppCompatActivity() {
 
         }
 
-        dropdown3.setOnClickListener{
-            voiceSpinner.performClick()
+        //dropdown3.setOnClickListener{
+           // voiceSpinner.performClick()
             //vibrateDevice()
 
-        }
+        //}
         val speedBar = findViewById<SeekBar>(R.id.speedbar)
         val pitchBar = findViewById<SeekBar>(R.id.pitchbar)
+        val speedText =findViewById<TextView>(R.id.speedtext)
+        val pitchText =findViewById<TextView>(R.id.pitchtext)
+
 
         speedBar.progress = talkspeedPrefs.getInt("speed", 50)
         pitchBar.progress = pitchPrefs.getInt("pitch", 50)
 
+        speedText.text = talkspeedPrefs.getInt("speed", 50).toString()
+        pitchText.text = pitchPrefs.getInt("pitch", 50).toString()
 
         speedBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 val prefeditor = talkspeedPrefs.edit()
                 prefeditor.putInt("speed", progress)
                 prefeditor.apply()
+                speedText.text = progress.toString()
             }
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
@@ -103,6 +113,7 @@ class Settings : AppCompatActivity() {
                 val pref2editor = pitchPrefs.edit()
                 pref2editor.putInt("pitch", progress)
                 pref2editor.apply()
+                pitchText.text = progress.toString()
             }
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
@@ -134,7 +145,7 @@ class Settings : AppCompatActivity() {
 
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
-        val olOptions = resources.getStringArray(R.array.LanguageOptions)
+        val olOptions = resources.getStringArray(R.array.LanguageOptions2)
         //val olOptions =  arrayOf("English", "Spanish", "French", "German", "Portuguese", "Italian", "Polish", "Romanian", "Japanese", "Mandarin", "Russian" )
         val outputAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, olOptions)
         //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -158,27 +169,7 @@ class Settings : AppCompatActivity() {
         }
 
 
-        //Voice Part of Code
-        val voiceOptions = arrayOf("Female 1 (UK)", "Female 2 (US)", "Female 3 (IN)", "Female 4 (ES)", "Male 1 (UK)", "Male 2 (US)", "Male 3 (IN)", "Male 4 (ES)")
-        val voiceAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, voiceOptions)
-        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        voiceSpinner.adapter = voiceAdapter
-        sharedPreferences = getSharedPreferences("VoicePreferences", MODE_PRIVATE)
 
-        selectedVoice = sharedPreferences.getString("SelectedVoice", "").toString()
-        voiceSpinner.setSelection(voiceOptions.indexOf(selectedVoice))
-
-        voiceSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                selectedVoice = parent.getItemAtPosition(position).toString()
-                val voiceeditor = sharedPreferences.edit()
-                voiceeditor.putString("SelectedVoice", selectedVoice)
-                voiceeditor.apply()
-                vibrateDevice()
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {}
-        }
 
         val switchButton = findViewById<Switch>(R.id.switcher)
         val pauseSpeakPreferences = getSharedPreferences("pauseSpeakPrefs", MODE_PRIVATE)
@@ -189,19 +180,15 @@ class Settings : AppCompatActivity() {
             val pauseSpeakeditor = pauseSpeakPreferences.edit()
             if (isChecked) {
                 pauseSpeakeditor.putBoolean("switched", true)
+                Toast.makeText(this, "Pausing Feature Enabled", Toast.LENGTH_SHORT).show()
                 vibrateDevice()
             } else {
                 pauseSpeakeditor.remove("switched")
+                Toast.makeText(this, "Pausing Feature Disabled", Toast.LENGTH_SHORT).show()
             }
             pauseSpeakeditor.apply()
         }
-        val box = findViewById<View>(R.id.box)
 
-        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-            box.setBackgroundColor(resources.getColor(R.color.dark_mode_color))
-        } else {
-            box.setBackgroundColor(resources.getColor(R.color.notwhite))
-        }
         //Dark/light mode code
         val lightdarkbutton = findViewById<Switch>(R.id.switch_dark_mode)
         val nightModeRetriever = AppCompatDelegate.getDefaultNightMode()
@@ -213,8 +200,11 @@ class Settings : AppCompatActivity() {
 
         lightdarkbutton.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
+                Toast.makeText(this, "Dark Mode Enabled", Toast.LENGTH_SHORT).show()
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+
             } else {
+                Toast.makeText(this, "Light Mode Enabled", Toast.LENGTH_SHORT).show()
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
             }

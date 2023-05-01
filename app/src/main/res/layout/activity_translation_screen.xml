@@ -7,6 +7,26 @@
     android:background="@drawable/layout_background"
     tools:context=".TranslationScreen">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/loadingPanel"
+        android:elevation="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center" >
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:indeterminate="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.8" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <View
         android:layout_width="350dp"
         android:layout_height="2dp"
@@ -47,9 +67,10 @@
         android:id="@+id/ts_textView"
         android:layout_width="330dp"
         android:layout_height="244dp"
-        android:text="Questions? Ask me!"
+        android:text=""
         android:textSize="36sp"
         android:gravity = "center"
+        android:scrollbars = "vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,9 +81,10 @@
         android:id="@+id/ts_textView2"
         android:layout_width="330dp"
         android:layout_height="244dp"
-        android:text="Fragen? Frag mich!"
+        android:text=""
         android:textSize="36sp"
         android:gravity = "center"
+        android:scrollbars = "vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -8,10 +8,10 @@
 
     <RelativeLayout
         android:id="@+id/loadingPanel"
-        android:elevation="2dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center" >
+        android:elevation="2dp"
+        android:gravity="center">
 
         <ProgressBar
             android:layout_width="wrap_content"
@@ -20,26 +20,26 @@
     </RelativeLayout>
 
     <!--    <Button-->
-<!--        android:id="@+id/camera_capture_button"-->
-<!--        android:layout_width="100dp"-->
-<!--        android:layout_height="100dp"-->
-<!--        android:layout_marginBottom="50dp"-->
-<!--        android:backgroundTint="#00A3FF"-->
-<!--        android:elevation="2dp"-->
-<!--        android:scaleType="fitCenter"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintLeft_toLeftOf="parent"-->
-<!--        app:layout_constraintRight_toRightOf="parent" />-->
+    <!--        android:id="@+id/camera_capture_button"-->
+    <!--        android:layout_width="100dp"-->
+    <!--        android:layout_height="100dp"-->
+    <!--        android:layout_marginBottom="50dp"-->
+    <!--        android:backgroundTint="#00A3FF"-->
+    <!--        android:elevation="2dp"-->
+    <!--        android:scaleType="fitCenter"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--        app:layout_constraintRight_toRightOf="parent" />-->
 
 
-<!--    <ImageView-->
-<!--        android:id="@+id/camera_settings_cog2"-->
-<!--        android:layout_width="58dp"-->
-<!--        android:layout_height="55dp"-->
+    <!--    <ImageView-->
+    <!--        android:id="@+id/camera_settings_cog2"-->
+    <!--        android:layout_width="58dp"-->
+    <!--        android:layout_height="55dp"-->
 
-<!--        android:src="@drawable/baseline_settings_24"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        tools:ignore="MissingConstraints" />-->
+    <!--        android:src="@drawable/baseline_settings_24"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        tools:ignore="MissingConstraints" />-->
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/camera_capture_button"
@@ -48,8 +48,8 @@
         android:layout_gravity="center"
         android:layout_marginBottom="50dp"
         android:background="@drawable/ellipse"
-        android:drawableStart="@drawable/camera_icon"
         android:contentDescription="@string/camera_capture"
+        android:drawableStart="@drawable/camera_icon"
         android:elevation="2dp"
         android:gravity="center"
         android:paddingLeft="0dp"
@@ -76,43 +76,56 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-<!--    <Switch-->
-<!--        android:id="@+id/switch1"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Switch" />-->
+    <!--    <Switch-->
+    <!--        android:id="@+id/switch1"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="Switch" />-->
 
-<!--    <Switch-->
-<!--        android:id="@+id/switch2"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Switch" />-->
+    <!--    <Switch-->
+    <!--        android:id="@+id/switch2"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="Switch" />-->
 
-<!--    <Switch-->
-<!--        android:id="@+id/switch1"-->
-<!--        android:layout_width="58dp"-->
-<!--        android:layout_height="67dp"-->
-<!--        android:elevation="2dp"-->
-<!--        android:text="Switch1"-->
-<!--        android:checked="false"-->
-<!--        android:scaleType="fitCenter"-->
-<!--        tools:ignore="MissingConstraints" />-->
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="58dp"
+        android:layout_height="67dp"
+        android:layout_marginRight="310dp"
+        android:layout_marginBottom="85dp"
+        android:checked="false"
+        android:elevation="2dp"
+        android:scaleType="fitCenter"
+        android:scaleX="2"
+        android:scaleY="2"
+        android:thumb="@drawable/fast_forward"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
-<!--    <Switch-->
-<!--        android:id="@+id/switch2"-->
-<!--        android:layout_width="58dp"-->
-<!--        android:layout_height="67dp"-->
-<!--        android:layout_marginStart="100dp"-->
-<!--        android:elevation="2dp"-->
-<!--        android:scaleType="fitCenter"-->
-<!--        android:text="Switch2"-->
-<!--        android:checked="false"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        tools:ignore="MissingConstraints" />-->
+
+    <Switch
+        android:id="@+id/switch2"
+        android:layout_width="58dp"
+        android:layout_height="67dp"
+        android:layout_marginLeft="270dp"
+        android:layout_marginBottom="85dp"
+        android:checked="false"
+        android:elevation="2dp"
+        android:scaleType="fitCenter"
+        android:scaleX="2"
+        android:scaleY="2"
+        android:thumb="@drawable/flash_off"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
 
     <androidx.camera.view.PreviewView
         android:id="@+id/preview_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

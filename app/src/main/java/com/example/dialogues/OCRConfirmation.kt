@@ -4,20 +4,16 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.*
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
-import android.os.StrictMode
 import android.os.Vibrator
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.RelativeLayout
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.graphics.toColor
 import androidx.navigation.ui.AppBarConfiguration
 import com.example.dialogues.databinding.ActivityOcrconfirmationBinding
 import com.google.mlkit.vision.common.InputImage
@@ -96,11 +92,12 @@ class OCRConfirmation : AppCompatActivity() {
             // call Translation activity
             val intent = Intent(this, TranslationScreen::class.java).putExtra("Text", result)
             startActivity(intent)
-            vibrateTime()
+            //vibrateTime()
         }
 
         findViewById<Button>(R.id.back_button).setOnClickListener {
             onBackPressed()
+            vibrateTime()
         }
 
         findViewById<Button>(R.id.settings_button).setOnClickListener {
@@ -114,10 +111,18 @@ class OCRConfirmation : AppCompatActivity() {
 
         val image: InputImage
 
+
+
         try {
             image = InputImage.fromFilePath(this, imageUri)
             // call the text recognition routine
-            TextRecognizer(::textFound).recognizeImageText(image, 0, ::resultText)
+            if (intent.extras?.getBoolean("Confirm")!!) {
+                TextRecognizer(::textFound).recognizeImageText(image, 0, ::resultText)
+            } else {
+                findViewById<Button>(R.id.confirm).visibility = View.GONE
+                findViewById<Button>(R.id.settings_button).visibility = View.GONE
+                TextRecognizer(::passResultText).recognizeImageText(image, 0, ::resultText)
+            }
         } catch (e: IOException) {
             e.printStackTrace()
         }
@@ -131,7 +136,10 @@ class OCRConfirmation : AppCompatActivity() {
         val rotatedBitmap = bitmap.rotate(90f)
 
         // copy the image so we can draw on it
-        mutableBitmap = rotatedBitmap.copy(Bitmap.Config.ARGB_8888, true)
+        mutableBitmap = rotatedBitmap.copy(Bitmap.Config.ARGB_8888, false)
+
+        binding.imageView.setImageBitmap(mutableBitmap)
+        binding.imageView.scaleType = ImageView.ScaleType.CENTER_CROP
     }
 
     /* OCR CALLBACK FUNCTIONS */
@@ -164,29 +172,38 @@ class OCRConfirmation : AppCompatActivity() {
         findViewById<RelativeLayout>(R.id.loadingPanel).visibility = View.GONE
     }
 
+    private fun passResultText(text: Text) {
+        // take text only from boxes still selected
+        var result = ""
+        for (line in text.textBlocks) {
+            result += "${line.text} "
+        }
+
+        // call Translation activity
+        val intent = Intent(this, TranslationScreen::class.java).putExtra("Text", result)
+        startActivity(intent)
+    }
+
     private fun Bitmap.rotate(degrees: Float): Bitmap {
         val matrix = Matrix().apply { postRotate(degrees) }
         return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
     }
 
     private fun drawBoxes() {
-        val canvas = Canvas(mutableBitmap)
+        val copiedBitmap = mutableBitmap.copy(Bitmap.Config.ARGB_8888, true)
+        val canvas = Canvas(copiedBitmap)
 
-        val selectedPaint = Paint()
-        selectedPaint.color = Color.GREEN
-        selectedPaint.style = Paint.Style.STROKE
-        selectedPaint.strokeWidth = 16f
+        val selected = resources.getDrawable(R.drawable.selected_text)
 
-        val unselectedPaint = Paint()
-        unselectedPaint.color = Color.RED
-        unselectedPaint.style = Paint.Style.STROKE
-        unselectedPaint.strokeWidth = 16f
+        val unselected = resources.getDrawable(R.drawable.unselected_text)
 
         for ((i, boundingBox) in boundingBoxes.withIndex()) {
             if (selectedStates[i]) {
-                canvas.drawRect(boundingBox, selectedPaint)
+                selected.bounds = boundingBox
+                selected.draw(canvas)
             } else {
-                canvas.drawRect(boundingBox, unselectedPaint)
+                unselected.bounds = boundingBox
+                unselected.draw(canvas)
             }
         }
 
@@ -195,7 +212,7 @@ class OCRConfirmation : AppCompatActivity() {
         viewToBitmapWidthScaleFactor = mutableBitmap.width.toDouble() / binding.imageView.width.toDouble()
 
         // put the new image on screen
-        binding.imageView.setImageBitmap(mutableBitmap)
+        binding.imageView.setImageBitmap(copiedBitmap)
         binding.imageView.scaleType = ImageView.ScaleType.CENTER_CROP
     }
 }
